@@ -17,6 +17,7 @@ Launch your application in development mode for livereload
     $ grunt
 
 For production
+
     $ node server
 
 [1]: https://angularjs.org/
