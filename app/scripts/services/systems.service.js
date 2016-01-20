@@ -5,6 +5,7 @@ angular.module('edGalaxyMap')
     class SystemsService {
             constructor() {
                 this.systems = [];
+                this.selectedSystem;
                 // this.loading = false;
                 // this.errors = false;
             }
@@ -17,6 +18,7 @@ angular.module('edGalaxyMap')
                         .then(function(systemsData){
                             //assign the response to the service
                             this.systems = systemsData;
+                            this.selectedSystem = systemsData[0]
                             //done loading
                             this.loading = false;
                             this.errors = false;
@@ -28,6 +30,11 @@ angular.module('edGalaxyMap')
                             return reject(e);
                         }.bind(this));
                 }.bind(this));
+            }
+
+            setSelectedSystem(systemData){
+              this.selectedSystem = systemData;
+              console.log(this.selectedSystem);
             }
         }
         return new SystemsService;

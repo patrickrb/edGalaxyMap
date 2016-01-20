@@ -14,6 +14,7 @@
 
 	<!-- build:css(.tmp) styles/main.css -->
 	<link rel="stylesheet" href="styles/main.css">
+	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"></script>
 	<!-- endbuild -->
 </head>
 <body ng-app="edGalaxyMap" style="margin:0px;">
@@ -27,13 +28,14 @@
 	<![endif]-->
 
 	<!-- Add your site or application content here -->
-	<div class="container" ng-view=""></div>
-    <div id="pointer" style="top: -30px; left: 0px;"></div>
+	<div ng-view=""></div>
+  <div id="pointer" style="top: -30px; left: 0px;"></div>
 
 	<!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
 
 
 	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 	<script src="bower_components/three.js/build/three.js"></script>
 	<script src="bower_components/three.js/examples/js/controls/TrackballControls.js"></script>
 	<script src="bower_components/three.js/examples/js/renderers/Projector.js"></script>
@@ -53,6 +55,7 @@
 	<script src="scripts/factories/systems.factory.js"></script>
 	<script src="scripts/services/systems.service.js"></script>
 	<script src="scripts/directives/edSystemMap.js"></script>
+	<script src="scripts/directives/systemInfo.js"></script>
 	<!-- endbuild -->
 </body>
 </html>

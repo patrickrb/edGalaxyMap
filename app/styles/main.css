@@ -4,21 +4,35 @@ body {
     color: #333;
 }
 
-.hero-unit {
-    margin: 50px auto 0 auto;
-    width: 600px;
-    font-size: 18px;
-    font-weight: 200;
-    line-height: 30px;
-    background-color: #eee;
-    border-radius: 6px;
-    padding: 60px;
+ed-system-map{
+  z-index: 1;
 }
 
-.hero-unit h1 {
-    font-size: 60px;
-    line-height: 1;
-    letter-spacing: -1px;
+system-info{
+  z-index: 4;
+  height:400px;
+  position:absolute;
+  top:0;
+  right:0;
+  width:300px;
+  background-color: #222222;
+  opacity: .85;
+}
+
+.systemInfoHeader{
+  background-color: #555555;
+  color:#ffffff;
+  border-bottom: 1px solid #dddddd;
+}
+
+.infoLabel{
+  color:#eeeeee;
+  text-align: left;
+}
+
+.infoItem{
+  color: #eeeeee;
+  font-weight: bold;
 }
 
 canvas {

@@ -1,5 +1,5 @@
 angular.module('edSystemMap', [])
-	.directive('edSystemMap',function ($q, systemsService) {
+	.directive('edSystemMap',function ($q, systemsService, $rootScope) {
 			return {
 				restrict: 'E',
 				link: function (scope, elem, attr) {
@@ -56,8 +56,8 @@ angular.module('edSystemMap', [])
 									particle.x = systemsService.systems[i].x;
 									particle.y = systemsService.systems[i].y;
 									particle.z = systemsService.systems[i].z;
-
 									particle.name = systemsService.systems[i].name;
+									particle.metaData = systemsService.systems[i];
 									particles.vertices.push(particle);
 									colors[i] = '0x0000ff';
 
@@ -149,6 +149,7 @@ angular.module('edSystemMap', [])
                 if (!intersect) return;
                 var location = intersect.object.geometry.vertices[intersect.index];
               	flyToSystem(location);
+								$rootScope.$broadcast('selectedSystem:update', location.metaData);
 					}
 
 					function flyToSystem(location){
