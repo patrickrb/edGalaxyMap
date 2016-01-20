@@ -11,6 +11,8 @@
     "angular-scenario": "~1.4.8",
     "es5-shim": "~4.4.1",
     "json3": "~3.3.2",
-    "angular-route": "~1.4.8"
+    "angular-route": "~1.4.8",
+    "tween.js": "tweenjs#~16.3.4",
+    "jquery": "~2.2.0"
   }
 }
