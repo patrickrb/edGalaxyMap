@@ -11,6 +11,8 @@ angular.module('edSystemMap', [])
 					var previous;
 					var particleSystem;
 					var raycaster;
+					var backgroundScene;
+					var backgroundCamera;
 					var mouse = new THREE.Vector2(0, 0);
 					var selectedNodes = [];
 					var systemNodeData = [];
@@ -127,6 +129,22 @@ angular.module('edSystemMap', [])
 						// Renderer
 						renderer = new THREE.WebGLRenderer();
 						renderer.setSize(window.innerWidth, window.innerHeight);
+
+						var texture = THREE.ImageUtils.loadTexture( 'models/background.jpg' );
+						var backgroundMesh = new THREE.Mesh(
+            new THREE.PlaneGeometry(2, 2, 0),
+            new THREE.MeshBasicMaterial({
+                map: texture
+            }));
+
+						backgroundMesh .material.depthTest = false;
+        		backgroundMesh .material.depthWrite = false;
+
+						backgroundScene = new THREE.Scene();
+		      	backgroundCamera = new THREE.Camera();
+		        backgroundScene.add(backgroundCamera );
+		        backgroundScene.add(backgroundMesh );
+
 						elem[0].appendChild(renderer.domElement);
 
 						// Events
@@ -214,6 +232,9 @@ angular.module('edSystemMap', [])
 
 					//
 					function render() {
+	            renderer.autoClear = false;
+	            renderer.clear();
+	            renderer.render(backgroundScene , backgroundCamera )
 							renderer.render(scene, camera);
 					}
 				}
