@@ -1,5 +1,5 @@
 angular.module('edSystemMap', [])
-	.directive('edSystemMap',function (systemsService) {
+	.directive('edSystemMap',function ($q, systemsService) {
 			return {
 				restrict: 'E',
 				link: function (scope, elem, attr) {
@@ -12,9 +12,10 @@ angular.module('edSystemMap', [])
 					var particleSystem;
 					var mouse = new THREE.Vector2(0, 0);
 					var raycaster = new THREE.Raycaster();
-					raycaster.params.PointCloud.threshold = 30;
+					raycaster.params.PointCloud.threshold = 800;
 					var selectedNodes = [];
 					var systemNodeData = [];
+					var label = $("#pointer");
 					var INTERSECTED;
 					//load galaxy data
 					systemsService.init();
@@ -36,14 +37,14 @@ angular.module('edSystemMap', [])
 						texture.minFilter = THREE.LinearFilter;
 						var particles = new THREE.Geometry();
 						var pMaterial = new THREE.ParticleBasicMaterial({
-										size: 1,
-										transparent: true,
-										opacity: 1,
-										map: texture,
-										sizeAttenuation: true,
-										blending: THREE.Normal,
-										fog: false,
-										alphaTest: .99
+                    size: 1,
+                    transparent: false,
+                    opacity: .95,
+                    sizeAttenuation: true,
+                    map: texture,
+                    blending: THREE.AdditiveBlending,
+                    fog: true,
+                    alphaTest: .01
 						});
 
 						for (var i = 0; i < systemsService.systems.length; i++) {
@@ -67,11 +68,22 @@ angular.module('edSystemMap', [])
 
 					function onMouseMove( event ) {
 						event.preventDefault();
+
+            var $target = $(event.target);
 						// calculate mouse position in normalized device coordinates
 						// (-1 to +1) for both components
 						mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 						mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-						findIntersect(event);
+						var intersect = findIntersect(event);
+						if (!intersect) {
+								label.css({
+										visibility: 'hidden',
+										display: 'none'
+								});
+						}
+						else {
+						$target.focus();
+						}
 					}
 
 
@@ -124,11 +136,24 @@ angular.module('edSystemMap', [])
 									// this.addLabel(event, location.name);
 									// this.setTargetPosition(location);
 									// this.setPreviewPosition(location);
-									console.log('intersected: ', location.name)
+									console.log('intersected: ', location.name);
+									addLabel(event, location.name);
 									return intersect;
 							} else {
 									return false;
 							}
+					}
+
+					function addLabel(event, name){
+              return $q(function (resolve, reject) {
+                  label.css({
+                      top: (event.offsetY - 1) - 30,
+                      left: (event.offsetX + 1) - 40,
+                      visibility: 'visible',
+                      display: 'block'
+                  });
+                  return resolve(label.html(name));
+              }.bind(this));
 					}
 
 					function animate() {
