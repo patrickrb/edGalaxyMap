@@ -11,6 +11,7 @@ module.exports = function(app) {
 
   // Insert routes below
   app.use('/api/systems', require('./api/systems'));
+  app.use('/api/stations', require('./api/stations'))
 
 
 
