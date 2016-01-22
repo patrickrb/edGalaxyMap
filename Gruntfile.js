@@ -18,6 +18,16 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         // The actual grunt server settings
+        express: {
+           options: {
+             // Override defaults here
+           },
+           dev: {
+             options: {
+               script: 'server/edGalaxy.js'
+             }
+           }
+         },
         connect: {
             options: {
                 port: 9000,
@@ -40,6 +50,13 @@ module.exports = function(grunt) {
         },
         watch: {
             // Watch javascript files for linting
+            express: {
+              files:  [ 'server/**/*.js' ],
+              tasks:  [ 'express:dev' ],
+              options: {
+                spawn: false // for grunt-contrib-watch v0.5.0+, "nospawn: true" for lower versions. Without this option specified express won't be reloaded
+              }
+            },
             js: {
                 files: [
                     '<%= jshint.all %>'
