@@ -24,24 +24,12 @@ module.exports = function(grunt) {
            },
            dev: {
              options: {
-               script: 'server/edGalaxy.js'
+               port:3000,
+               script: 'server/edGalaxy.js',
+               livereload: true
              }
            }
          },
-        connect: {
-            options: {
-                port: 9000,
-                livereload: 35729,
-                // Change this to '0.0.0.0' to access the server from outside
-                hostname: 'localhost'
-            },
-            livereload: {
-                options: {
-                    open: true,
-                    base: [ base ]
-                }
-            }
-        },
         jshint: {
             options: {
                 jshintrc: '.jshintrc'
@@ -49,7 +37,6 @@ module.exports = function(grunt) {
             all: [ base + '/scripts/**/*.js' ]
         },
         watch: {
-            // Watch javascript files for linting
             express: {
               files:  [ 'server/**/*.js' ],
               tasks:  [ 'express:dev' ],
@@ -61,32 +48,30 @@ module.exports = function(grunt) {
                 files: [
                     '<%= jshint.all %>'
                 ],
-                tasks: ['jshint']
+                tasks: ['jshint'],
+                options: {
+                  livereload: true
+                }
             },
             json: {
                 files: [
                     '{package,bower}.json'
                 ],
                 tasks: ['jsonlint']
-            },
-            // Live reload
-            reload: {
-                options: {
-                    livereload: '<%= connect.options.livereload %>'
-                },
-                files: [
-                    '<%= watch.js.files %>',
-                    '<%= watch.json.files %>',
-                    base + '/css/**/*.css',
-                    '**/*.html'
-                ]
             }
-        }
+        },
+        open: {
+         dev: {
+           // Gets the port from the connect configuration
+           path: 'http://localhost:<%= express.dev.options.port%>'
+         }
+       }
     });
 
     grunt.registerTask('serve', function () {
         grunt.task.run([
-            'connect:livereload',
+            'express',
+            'open:dev',
             'watch'
         ]);
     });
