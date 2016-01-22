@@ -1,5 +1,5 @@
 angular.module('edSystemMap', [])
-	.directive('edSystemMap',function ($q, systemsService, $rootScope) {
+	.directive('edSystemMap',function ($q, systemsService, $rootScope, stationsService) {
 			return {
 				restrict: 'E',
 				link: function (scope, elem, attr) {
@@ -37,6 +37,18 @@ angular.module('edSystemMap', [])
 								animate();
 							}
 			    });
+
+					//wait for systems data to load, then draw systems and animate
+					scope.$watch(function() {
+							return stationsService.stations.length;
+					}, function(newVal, oldVal) {
+							if(stationsService.stations.length >= 1){
+								scope.stations = stationsService.stations;
+							}
+							else{
+								scope.stations = []
+							}
+					});
 
 					function loadSystems() {
 						var texture = THREE.ImageUtils.loadTexture('models/circle.png');
@@ -173,6 +185,8 @@ angular.module('edSystemMap', [])
                 if (!intersect) return;
                 var location = intersect.object.geometry.vertices[intersect.index];
               	flyToSystem(location);
+								console.log(location);
+								stationsService.findStationsBySystemId(location.metaData.systemId);
 								$rootScope.$broadcast('selectedSystem:update', location.metaData);
 					}
 

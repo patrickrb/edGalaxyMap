@@ -46,4 +46,13 @@
     <div class="col-sm-2 infoLabel no-margin">State: </div>
     <div class="col-sm-10 infoItem">{{selectedSystem.state}}</div>
   </div>
+  <br />
+  <br />
+
+  <div class="row">
+    <div class="col-sm-12 systemInfoHeader">Stations</div>
+  </div>
+  <div class="row" ng-repeat="station in stations">
+    <div class="col-sm-12 infoItem text-left">{{station.name}}</div>
+  </div>
 </div>

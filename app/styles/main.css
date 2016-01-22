@@ -10,7 +10,7 @@ ed-system-map{
 
 system-info{
   z-index: 4;
-  height:400px;
+  height:100%;
   position:absolute;
   top:0;
   right:0;

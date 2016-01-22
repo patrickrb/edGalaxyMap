@@ -20,15 +20,12 @@ exports.index = function(req, res) {
   });
 };
 
-// Get a single station
-exports.show = function(req, res) {
-  Station.findById(req.params.id, function (err, station) {
+exports.findStationsBySystemId = function(req, res) {
+  Station.find({system_id: req.params.systemId},function (err, stations) {
     if(err) { return handleError(res, err); }
-    if(!station) { return res.status(404).send('Not Found'); }
-    return res.json(station);
+    return res.status(200).json(stations);
   });
 };
-
 
 // Creates a new station in the DB.
 exports.create = function(req, res) {
