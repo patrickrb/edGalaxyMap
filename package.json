@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "dependencies": {
     "connect": "^3.4.0",
+    "connect-livereload": "^0.5.4",
+    "express": "^4.13.3",
+    "mongoose": "^4.3.6",
     "serve-static": "^1.10.1"
   },
   "devDependencies": {
