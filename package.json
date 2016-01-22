@@ -18,6 +18,7 @@
     "grunt-express-server": "^0.5.1",
     "grunt-jsonlint": "^1.0.4",
     "grunt-newer": "^1.1.0",
+    "grunt-open": "^0.2.3",
     "load-grunt-tasks": "^3.1.0",
     "time-grunt": "^1.0.0"
   }
