@@ -130,20 +130,20 @@ angular.module('edSystemMap', [])
 						renderer = new THREE.WebGLRenderer();
 						renderer.setSize(window.innerWidth, window.innerHeight);
 
-						var texture = THREE.ImageUtils.loadTexture( 'models/background.jpg' );
-						var backgroundMesh = new THREE.Mesh(
-            new THREE.PlaneGeometry(2, 2, 0),
-            new THREE.MeshBasicMaterial({
-                map: texture
-            }));
-
-						backgroundMesh .material.depthTest = false;
-        		backgroundMesh .material.depthWrite = false;
-
-						backgroundScene = new THREE.Scene();
-		      	backgroundCamera = new THREE.Camera();
-		        backgroundScene.add(backgroundCamera );
-		        backgroundScene.add(backgroundMesh );
+						// var texture = THREE.ImageUtils.loadTexture( 'models/background.jpg' );
+						// var backgroundMesh = new THREE.Mesh(
+            // new THREE.PlaneGeometry(2, 2, 0),
+            // new THREE.MeshBasicMaterial({
+            //     map: texture
+            // }));
+						//
+						// backgroundMesh .material.depthTest = false;
+        		// backgroundMesh .material.depthWrite = false;
+						//
+						// backgroundScene = new THREE.Scene();
+		      	// backgroundCamera = new THREE.Camera();
+		        // backgroundScene.add(backgroundCamera );
+		        // backgroundScene.add(backgroundMesh );
 
 						elem[0].appendChild(renderer.domElement);
 
@@ -234,7 +234,7 @@ angular.module('edSystemMap', [])
 					function render() {
 	            renderer.autoClear = false;
 	            renderer.clear();
-	            renderer.render(backgroundScene , backgroundCamera )
+	            // renderer.render(backgroundScene , backgroundCamera )
 							renderer.render(scene, camera);
 					}
 				}
