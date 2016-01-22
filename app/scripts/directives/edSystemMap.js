@@ -114,7 +114,6 @@ angular.module('edSystemMap', [])
 
 						controls.addEventListener( 'change', render );
 
-
 						scene = new THREE.Scene();
 						targetCircleGeo = new THREE.CircleGeometry(1, 64);
             targetCircleGeo.vertices.shift();
@@ -153,6 +152,13 @@ angular.module('edSystemMap', [])
 						elem[0].addEventListener('click', function (event) {
 							checkClickForIntersect(event);
 						});
+					}
+
+					function getLightYears(sourceVector, targetVector){
+							var sourceVector = new THREE.Vector3(0,0,0);
+							var targetVector = new THREE.Vector3(3.03125, -0.09375, 3.15625);
+
+							return sourceVector.distanceTo(targetVector);
 					}
 
 					//
