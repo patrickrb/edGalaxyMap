@@ -6,7 +6,7 @@ var mongoose = require('mongoose'),
 var stationsSchema = new Schema({
   stationId: { type: Number, required: true },
   name: { type: String, required: true },
-  system_id : { type: Schema.Types.ObjectId, ref: 'Systems'},
+  system_id : { type: Number},
   max_landing_pad_size: { type: String },
   distance_to_star: { type: Number },
   faction: { type: String },
