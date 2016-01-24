@@ -12,7 +12,7 @@ system-info{
   z-index: 4;
   height:100%;
   position:absolute;
-  top:0;
+  top:52px;
   right:0;
   width:300px;
   background-color: #222222;
@@ -52,3 +52,20 @@ canvas {
         visibility: hidden;
         display: none;
     }
+
+#edNavBar{
+  margin-bottom: 0px;
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+}
+
+#edNavBar  img {
+  width: 32px;
+margin-top: 10px;
+}
+
+#edNavBar input{
+  margin-top:12px;
+}
