@@ -2,3 +2,28 @@
 
 	<ed-system-map></ed-system-map>
 	<system-info></system-info>
+	<script type="x-shader/x-vertex" id="step07_vs">
+			uniform float radiusX;
+			uniform float radiusZ;
+			uniform float size;
+			uniform float scale;
+			uniform float height;
+			uniform float elapsedTime;
+			uniform float speedH;
+			uniform float speedV;
+			void main() {
+        vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+        gl_PointSize = size * ( scale / length( mvPosition.xyz ) );
+        gl_Position = projectionMatrix * mvPosition;
+			}
+		</script>
+
+		<script type="x-shader/x-fragment" id="step09_fs">
+			uniform vec3 color;
+			uniform float opacity;
+			uniform sampler2D texture;
+			void main() {
+				vec4 texColor = texture2D( texture, gl_PointCoord );
+				gl_FragColor = texColor * vec4( color, 1.0 );
+			}
+		</script>

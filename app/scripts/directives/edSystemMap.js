@@ -39,19 +39,39 @@ angular.module('edSystemMap', [])
 			    });
 
 					function loadSystems() {
-						var texture = THREE.ImageUtils.loadTexture('models/circle.png');
+						var texture = THREE.ImageUtils.loadTexture('models/particle.png');
 						texture.minFilter = THREE.LinearFilter;
 						var particles = new THREE.Geometry();
-						var pMaterial = new THREE.ParticleBasicMaterial({
-                    size: 1,
-                    transparent: false,
-                    opacity: .95,
-                    sizeAttenuation: true,
-                    map: texture,
-                    blending: THREE.AdditiveBlending,
-                    fog: true,
-                    alphaTest: .01
-						});
+						// var pMaterial = new THREE.ParticleBasicMaterial({
+            //         size: 1,
+            //         transparent: false,
+            //         opacity: .95,
+            //         sizeAttenuation: true,
+            //         map: texture,
+            //         blending: THREE.AdditiveBlending,
+            //         fog: true,
+            //         alphaTest: .01
+						// });
+						systemMaterial = new THREE.ShaderMaterial({
+									uniforms: {
+										color:  { type: 'c', value: new THREE.Color( 0xFF00FF ) },
+										height: { type: 'f', value: 100 },
+										elapsedTime: { type: 'f', value: 0 },
+										radiusX: { type: 'f', value: 10 },
+										radiusZ: { type: 'f', value: 10 },
+										size: { type: 'f', value: 500 },
+										scale: { type: 'f', value: 1.0 },
+										opacity: { type: 'f', value: 0.0 },
+										texture: { type: 't', value: texture },
+										speedH: { type: 'f', value: 1 },
+										speedV: { type: 'f', value: 1}
+									},
+									vertexShader: document.getElementById( 'step07_vs' ).textContent,
+									fragmentShader: document.getElementById( 'step09_fs' ).textContent,
+									blending: THREE.AdditiveBlending,
+									transparent: true,
+									depthTest: false
+								});
 
 						for (var i = 0; i < systemsService.systems.length; i++) {
 							    particle = new THREE.Vector3();
@@ -64,7 +84,7 @@ angular.module('edSystemMap', [])
 									colors[i] = '0x0000ff';
 
 						}
-						particleSystem = new THREE.PointCloud(particles, pMaterial);
+						particleSystem = new THREE.PointCloud(particles, systemMaterial);
 						particleSystem.colors = colors;
 						particleSystem.frustrumCulled = true;
 						particleSystem.sortParticles = true;
@@ -95,7 +115,7 @@ angular.module('edSystemMap', [])
 
 
 					function init() {
-						camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 2000);
+						camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 999000);
 						camera.position.set(2, 4, 5);
 
 						camera.lookAt(0,0,0);
@@ -123,11 +143,12 @@ angular.module('edSystemMap', [])
 						scene.add(targetCircle);
 
 						raycaster = new THREE.Raycaster();
-						raycaster.params.PointCloud.threshold = .1;
+						raycaster.params.PointCloud.threshold = .3;
 						// raycaster.near = 5;
 						// Renderer
 						renderer = new THREE.WebGLRenderer();
 						renderer.setSize(window.innerWidth, window.innerHeight);
+						renderer.sortObjects = true;
 
 						// var texture = THREE.ImageUtils.loadTexture( 'models/background.jpg' );
 						// var backgroundMesh = new THREE.Mesh(
@@ -199,6 +220,7 @@ angular.module('edSystemMap', [])
 					function setTargetPosition(location) {
               return $q(function (resolve, reject) {
                   targetCircle.visible = true;
+									targetCircle.lookAt( camera.position );
                   return resolve(targetCircle.position.set(location.x, location.y, location.z))
               }.bind(this));
           }
