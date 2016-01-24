@@ -6,6 +6,7 @@ angular.module('edSystemMap', [])
 					var camera;
 					var controls;
 					var colors = [];
+					var particles = [];
 					var scene;
 					var renderer;
 					var previous;
@@ -34,6 +35,7 @@ angular.module('edSystemMap', [])
 			    }, function(newVal, oldVal) {
 							if(systemsService.systems.length >= 1){
 								loadSystems();
+								console.log('num systems: ', systemsService.systems.length);
 								animate();
 							}
 			    });
@@ -53,53 +55,61 @@ angular.module('edSystemMap', [])
 					function loadSystems() {
 						var texture = THREE.ImageUtils.loadTexture('models/particle.png');
 						texture.minFilter = THREE.LinearFilter;
-						var particles = new THREE.Geometry();
-						// var pMaterial = new THREE.ParticleBasicMaterial({
-            //         size: 1,
-            //         transparent: false,
-            //         opacity: .95,
-            //         sizeAttenuation: true,
-            //         map: texture,
-            //         blending: THREE.AdditiveBlending,
-            //         fog: true,
-            //         alphaTest: .01
-						// });
-						systemMaterial = new THREE.ShaderMaterial({
-									uniforms: {
-										color:  { type: 'c', value: new THREE.Color( 0xFF00FF ) },
-										height: { type: 'f', value: 100 },
-										elapsedTime: { type: 'f', value: 0 },
-										radiusX: { type: 'f', value: 10 },
-										radiusZ: { type: 'f', value: 10 },
-										size: { type: 'f', value: 500 },
-										scale: { type: 'f', value: 1.0 },
-										opacity: { type: 'f', value: 0.0 },
-										texture: { type: 't', value: texture },
-										speedH: { type: 'f', value: 1 },
-										speedV: { type: 'f', value: 1}
-									},
-									vertexShader: document.getElementById( 'step07_vs' ).textContent,
-									fragmentShader: document.getElementById( 'step09_fs' ).textContent,
-									blending: THREE.AdditiveBlending,
-									transparent: true,
-									depthTest: false
-								});
+						uniforms = {
 
-						for (var i = 0; i < systemsService.systems.length; i++) {
-							    particle = new THREE.Vector3();
-									particle.x = systemsService.systems[i].x;
-									particle.y = systemsService.systems[i].y;
-									particle.z = systemsService.systems[i].z;
-									particle.name = systemsService.systems[i].name;
-									particle.metaData = systemsService.systems[i];
-									particles.vertices.push(particle);
-									colors[i] = '0x0000ff';
+							color:     { type: "c", value: new THREE.Color( 0xffffff ) },
+							texture:   { type: "t", value: texture  },
+							scale: {type: "f", value: 2.0},
+							size: { type: "f", value: 500}
+
+						};
+
+						var shaderMaterial = new THREE.ShaderMaterial( {
+
+							uniforms:       uniforms,
+							vertexShader:   document.getElementById( 'vertexshader' ).textContent,
+							fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
+
+							blending:       THREE.AdditiveBlending,
+							depthTest:      false,
+							transparent:    true
+
+						});
+
+
+
+						geometry = new THREE.BufferGeometry();
+
+						var positions = new Float32Array( systemsService.systems.length * 3 );
+						var colors = new Float32Array( systemsService.systems.length * 3 );
+						var sizes = new Float32Array( systemsService.systems.length );
+
+						var color = new THREE.Color();
+
+						for ( var i = 0, i3 = 0; i < systemsService.systems.length; i ++, i3 += 3 ) {
+
+							positions[ i3 + 0 ] = systemsService.systems[i].x;
+							positions[ i3 + 1 ] = systemsService.systems[i].y;
+							positions[ i3 + 2 ] = systemsService.systems[i].z;
+
+
+							color.setHSL( i / systemsService.systems.length, 1.0, 0.5 );
+
+							colors[ i3 + 0 ] = color.r;
+							colors[ i3 + 1 ] = color.g;
+							colors[ i3 + 2 ] = color.b;
+
+							sizes[ i ] = 20;
 
 						}
-						particleSystem = new THREE.PointCloud(particles, systemMaterial);
-						particleSystem.colors = colors;
-						particleSystem.frustrumCulled = true;
-						particleSystem.sortParticles = true;
+
+
+						geometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
+						geometry.addAttribute( 'customColor', new THREE.BufferAttribute( colors, 3 ) );
+						geometry.addAttribute( 'size', new THREE.BufferAttribute( sizes, 1 ) );
+
+						particleSystem = new THREE.Points( geometry, shaderMaterial );
+
 
 						scene.add(particleSystem);
 					}
@@ -204,11 +214,10 @@ angular.module('edSystemMap', [])
 					function checkClickForIntersect(event){
 								var intersect = findIntersect(event);
                 if (!intersect) return;
-                var location = intersect.object.geometry.vertices[intersect.index];
+                var location = systemsService.systems[intersect.index];
               	flyToSystem(location);
-								console.log(location);
-								stationsService.findStationsBySystemId(location.metaData.systemId);
-								$rootScope.$broadcast('selectedSystem:update', location.metaData);
+								stationsService.findStationsBySystemId(location.systemId);
+								$rootScope.$broadcast('selectedSystem:update', location);
 					}
 
 					function flyToSystem(location){
@@ -244,7 +253,7 @@ angular.module('edSystemMap', [])
 							var intersects = raycaster.intersectObjects(scene.children);
 							if (Array.isArray(intersects) && intersects[0]) {
 									var intersect = intersects[0];
-									var location = intersect.object.geometry.vertices[intersect.index];
+									var location = systemsService.systems[intersect.index];
 									addLabel(event, location.name);
 									setTargetPosition(location);
 									return intersect;

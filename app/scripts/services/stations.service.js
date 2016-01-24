@@ -19,7 +19,6 @@ angular.module('edGalaxyMap')
                             //assign the response to the service
                             this.stations = stationsData;
                             this.selectedStation = stationsData[0]
-                            console.log('found stations: ', this.stations);
                             //done loading
                             this.loading = false;
                             this.errors = false;
