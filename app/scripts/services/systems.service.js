@@ -34,7 +34,6 @@ angular.module('edGalaxyMap')
 
             setSelectedSystem(systemData){
               this.selectedSystem = systemData;
-              console.log(this.selectedSystem);
             }
         }
         return new SystemsService;
