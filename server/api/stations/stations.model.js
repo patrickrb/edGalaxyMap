@@ -22,7 +22,6 @@ var stationsSchema = new Schema({
   has_rearm: { type: Boolean },
   has_outfitting: { type: Boolean },
   has_shipyard: { type: Boolean },
-  has_market: { type: Boolean },
   updated_at: { type: Date },
   has_commodities: { type: String },
   import_commodities: [String],
