@@ -6,7 +6,6 @@ angular.module('systemInfo', [])
 				link: function ($scope, elem, attr) {
           $scope.$on('selectedSystem:update', function(event,data) {
             $scope.selectedSystem = data;
-            $scope.$apply();
          });
         }
       }

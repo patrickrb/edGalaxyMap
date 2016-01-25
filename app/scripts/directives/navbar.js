@@ -1,5 +1,5 @@
 angular.module('navbar', [])
-	.directive('navbar',function ($q, systemsService) {
+	.directive('navbar',function ($rootScope, $q, systemsService) {
 			return {
 				restrict: 'E',
 				templateUrl: 'views/navbar.html',
@@ -8,24 +8,9 @@ angular.module('navbar', [])
               email: 'burnsoft@gmail.com'
             }
 
-
-					  $scope.ngModelOptionsSelected = function(value) {
-					    if (arguments.length) {
-					      _selected = value;
-					    } else {
-					      return _selected;
-					    }
-					  };
-
-
-						$scope.modelOptions = {
-							debounce: {
-								default: 500,
-								blur: 250
-							},
-							getterSetter: true
-						};
-
+						$scope.changeSystem = function($item, $model, $label, $event){
+							$rootScope.$broadcast('selectedSystem:update', $item);
+						}
 
 						//wait for systems data to load, then draw systems and animate
 						$scope.$watch(function() {
