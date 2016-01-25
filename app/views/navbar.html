@@ -9,34 +9,34 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">ED Galaxy Online</a>
+            <a class="navbar-brand">ED Galaxy Online</a>
           </div>
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="#">Home</a></li>
+              <li class="active"><a>Home</a></li>
               <li class="dropdown">
                 <a uib-dropdown-toggle class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Systems <span class="caret"></span></a>
                 <ul uib-dropdown-menu class="dropdown-menu">
-                  <li><a href="#">Popular Systems</a></li>
-                    <li><a href="#">Search Systems</a></li>
+                  <li><a>Popular Systems</a></li>
+                    <li><a>Search Systems</a></li>
                 </ul>
               </li>
               <li class="dropdown">
                 <a uib-dropdown-toggle class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Stations <span class="caret"></span></a>
                 <ul uib-dropdown-menu class="dropdown-menu">
-                  <li><a href="#">Popular Stations</a></li>
-                    <li><a href="#">Search Stations</a></li>
+                  <li><a>Popular Stations</a></li>
+                    <li><a>Search Stations</a></li>
                 </ul>
               </li>
               <li class="dropdown">
                 <a uib-dropdown-toggle class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Trade <span class="caret"></span></a>
                 <ul uib-dropdown-menu class="dropdown-menu">
-                  <li><a href="#">Popular Trade Routes</a></li>
-                    <li><a href="#">Search Trade Routes</a></li>
+                  <li><a>Popular Trade Routes</a></li>
+                    <li><a>Search Trade Routes</a></li>
                 </ul>
               </li>
                 <li><a>Search</a></li>
-                <li><input type="text"  class="form-control" ng-model="selectedSystem" typeahead-on-select="changeSystem($item, $model, $label, $event)" uib-typeahead="system as system.name for system in systems | filter:$viewValue | limitTo:8" class="form-control" typeahead-show-hint="true" typeahead-min-length="2">
+                <li id="searchSystemListItem"><input type="text" id="searchSystemsInput" class="form-control" ng-model="selectedSystem" typeahead-on-select="changeSystem($item, $model, $label, $event)" uib-typeahead="system as system.name for system in systems | filter:$viewValue | limitTo:8" class="form-control" typeahead-show-hint="true" typeahead-min-length="2">
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li><img gravatar-src-once="user.email"></li>

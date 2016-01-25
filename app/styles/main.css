@@ -66,6 +66,9 @@ canvas {
 margin-top: 10px;
 }
 
+#searchSystemListItem {
+  margin-top: 4px;
+}
 
 .typeahead-demo .custom-popup-wrapper {
   position: absolute;

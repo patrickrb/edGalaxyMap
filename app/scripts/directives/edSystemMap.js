@@ -40,8 +40,8 @@ angular.module('edSystemMap', [])
 			    }, function(newVal, oldVal) {
 							if(systemsService.systems.length >= 1){
 								loadSystems();
-								console.log('num systems: ', systemsService.systems.length);
 								animate();
+								// document.getElementById("searchSystemsInput").focus();
 							}
 			    });
 
