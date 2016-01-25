@@ -29,6 +29,11 @@ angular.module('edSystemMap', [])
 					//init the scene
 					init();
 
+          scope.$on('selectedSystem:update', function(event,data) {
+            scope.selectedSystem = data;
+						flyToSystem(scope.selectedSystem);
+         });
+
 					//wait for systems data to load, then draw systems and animate
 					scope.$watch(function() {
 			        return systemsService.systems.length;
@@ -215,7 +220,6 @@ angular.module('edSystemMap', [])
 								var intersect = findIntersect(event);
                 if (!intersect) return;
                 var location = systemsService.systems[intersect.index];
-              	flyToSystem(location);
 								stationsService.findStationsBySystemId(location.systemId);
 								$rootScope.$broadcast('selectedSystem:update', location);
 					}

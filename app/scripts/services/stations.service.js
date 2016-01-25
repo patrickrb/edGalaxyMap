@@ -53,11 +53,6 @@ angular.module('edGalaxyMap')
                         }.bind(this));
                 }.bind(this));
             }
-
-            setSelectedStation(systemData){
-              this.selectedStation = systemData;
-              console.log(this.selectedStation);
-            }
         }
         return new StationsService;
   });
