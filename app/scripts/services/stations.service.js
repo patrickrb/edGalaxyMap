@@ -6,6 +6,7 @@ angular.module('edGalaxyMap')
             constructor() {
                 this.stations = [];
                 this.selectedStation;
+                this.loading = false;
                 // this.loading = false;
                 // this.errors = false;
             }
@@ -13,6 +14,7 @@ angular.module('edGalaxyMap')
             findStationsBySystemId(systemId) {
                 return new $q(function(resolve, reject){
                     this.loading = true;
+                    this.stations.length = 0;
                     //this service is now trying to load data
                     stationsFactory.findStationsBySystemId(systemId)
                         .then(function(stationsData){
