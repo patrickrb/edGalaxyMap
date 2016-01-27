@@ -25,6 +25,8 @@ system-info{
   border-bottom: 1px solid #dddddd;
 }
 
+
+
 .infoLabel{
   color:#eeeeee;
   text-align: left;
@@ -95,3 +97,33 @@ margin-top: 10px;
   border-radius: 0;
   box-shadow: none;
 }
+
+.loadingCircle {
+  width: 80px;
+  height: 80px;
+  border-radius: 40px;
+  box-sizing: border-box;
+  border: 10px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #FFF;
+  animation: spin 1s infinite linear;
+}
+
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingContainer {
+   position: relative;
+   display: inline-block;
+   padding: 30px;
+   width: 80px;
+   height: 80px;
+ }
+
+ loading-spinner{
+   position: absolute;
+   margin-left: 65px;
+ }
