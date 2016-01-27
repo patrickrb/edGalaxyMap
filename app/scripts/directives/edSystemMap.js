@@ -8,8 +8,12 @@ angular.module('edSystemMap', [])
 					var colors = [];
 					var particles = [];
 					var scene;
+					var uniforms;
 					var renderer;
+					var loadingTextMesh;
 					var previous;
+					var isLoading = true;
+					var clock = new THREE.Clock();
 					var particleSystem;
 					var raycaster;
 					var backgroundScene;
@@ -28,6 +32,7 @@ angular.module('edSystemMap', [])
 					systemsService.init();
 					//init the scene
 					init();
+					animate();
 
           scope.$on('selectedSystem:update', function(event,data) {
             scope.selectedSystem = data;
@@ -40,7 +45,6 @@ angular.module('edSystemMap', [])
 			    }, function(newVal, oldVal) {
 							if(systemsService.systems.length >= 1){
 								loadSystems();
-								animate();
 								// document.getElementById("searchSystemsInput").focus();
 							}
 			    });
@@ -58,13 +62,14 @@ angular.module('edSystemMap', [])
 					});
 
 					function loadSystems() {
+						toggleSceneLoading(false);
 						var texture = THREE.ImageUtils.loadTexture('models/particle.png');
 						texture.minFilter = THREE.LinearFilter;
 						uniforms = {
 
 							color:     { type: "c", value: new THREE.Color( 0xffffff ) },
 							texture:   { type: "t", value: texture  },
-							scale: {type: "f", value: 2.0},
+							scale: {type: "f", value: 1.0},
 							size: { type: "f", value: 500}
 
 						};
@@ -117,6 +122,7 @@ angular.module('edSystemMap', [])
 
 
 						scene.add(particleSystem);
+						isLoading = false;
 					}
 
 					function onMouseMove( event ) {
@@ -142,10 +148,10 @@ angular.module('edSystemMap', [])
 
 
 					function init() {
-						camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 999000);
-						camera.position.set(2, 4, 5);
+						camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1, 999000);
+						camera.position.set(0, 0, 50);
 
-						camera.lookAt(0,0,0);
+						camera.lookAt(-25,0, 0);
 						controls = new THREE.TrackballControls( camera );
 						controls.rotateSpeed = 2.0;
 						controls.zoomSpeed = 2.2;
@@ -162,6 +168,7 @@ angular.module('edSystemMap', [])
 						controls.addEventListener( 'change', render );
 
 						scene = new THREE.Scene();
+						toggleSceneLoading(true);
 						targetCircleGeo = new THREE.CircleGeometry(1, 64);
             targetCircleGeo.vertices.shift();
             targetCircle.add(new THREE.Line(targetCircleGeo, targetLineMaterial));
@@ -200,6 +207,45 @@ angular.module('edSystemMap', [])
 						elem[0].addEventListener('click', function (event) {
 							checkClickForIntersect(event);
 						});
+					}
+
+					function toggleSceneLoading(isLoading){
+						if(isLoading){
+
+							uniforms = {
+										resolution:{ type: "v2", value: new THREE.Vector2(1,1)},
+										time: {type: "f", value: 1.0},
+										speed: {type: "f", value: 0.1},
+										baseRadius: {type: "f", value: 0.4},
+										backgroundColor:     { type: "v3", value: new THREE.Vector3( 0, 0, 0.5 ) },
+										brightnessVariation: {type: "f", value: 0.4},
+										colorVariation: {type: "f", value: 0.6},
+										variation: {type: "f", value: 8.0 }
+									};
+
+									var shaderMaterial = new THREE.ShaderMaterial( {
+										uniforms:       uniforms,
+										vertexShader:   document.getElementById( 'dotVertexShader' ).textContent,
+										fragmentShader: document.getElementById( 'dotFragmentShader' ).textContent
+									});
+
+									var material = new THREE.MeshNormalMaterial;
+									var loadingTextGeometry = new THREE.TextGeometry('Loading',{
+									    size: 7,
+											height:1,
+									    curveSegments: 3,
+									    font: 'helvetiker',
+									    weight: 'normal'
+									})
+
+									loadingTextMesh = new THREE.Mesh( loadingTextGeometry, shaderMaterial );
+									loadingTextMesh.position.set(-25,0, 0)
+									loadingTextMesh.lookAt( camera.position );
+									scene.add(loadingTextMesh);
+						}
+						else{
+							scene.remove(loadingTextMesh);
+						}
 					}
 
 					function getLightYears(sourceVector, targetVector){
@@ -287,6 +333,11 @@ angular.module('edSystemMap', [])
 
 					//
 					function render() {
+
+							var delta = clock.getDelta();
+							if(isLoading){
+								uniforms.time.value += delta * 5;
+							}
 	            renderer.autoClear = false;
 	            renderer.clear();
 	            // renderer.render(backgroundScene , backgroundCamera )

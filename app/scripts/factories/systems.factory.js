@@ -4,7 +4,7 @@ angular.module('edGalaxyMap')
   .factory('systemsFactory', function ($http) {
       class SystemsFactory {
             find() {
-                return $http.get('/models/systems.json')
+                return $http.get('/api/systems')
                     .then(x => {
                       return x.data;
                     });
