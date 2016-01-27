@@ -1,6 +1,7 @@
 var path = require('path');
 var express = require('express');
 var mongoose = require('mongoose');
+var compression = require('compression')
 var app = express();
 
 var rootDir = path.normalize(__dirname + '/..');
@@ -18,7 +19,7 @@ mongoose.connection.on('error', function(err) {
     app.use(require('connect-livereload')());
     app.use(express.static(path.join(rootDir, 'app')));
     app.set('appPath', path.join(rootDir, 'app'));
-
+		app.use(compression())
 
 
 require('./routes')(app);

@@ -2,6 +2,7 @@
   "name": "temp",
   "version": "0.0.0",
   "dependencies": {
+    "compression": "^1.6.1",
     "connect": "^3.4.0",
     "connect-livereload": "^0.5.4",
     "express": "^4.13.3",
