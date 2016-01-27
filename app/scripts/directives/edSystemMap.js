@@ -123,6 +123,7 @@ angular.module('edSystemMap', [])
 
 						scene.add(particleSystem);
 						isLoading = false;
+						addControls();
 					}
 
 					function onMouseMove( event ) {
@@ -133,27 +134,24 @@ angular.module('edSystemMap', [])
 						// (-1 to +1) for both components
 						mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 						mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-						var intersect = findIntersect(event);
-						if (!intersect) {
-								label.css({
-										visibility: 'hidden',
-										display: 'none'
-								});
-								targetCircle.visible = false;
-						}
-						else {
-						$target.focus();
+						if(!isLoading){
+							var intersect = findIntersect(event);
+							if (!intersect) {
+										label.css({
+												visibility: 'hidden',
+												display: 'none'
+										});
+										targetCircle.visible = false;
+								}
+							else {
+								$target.focus();
+							}
 						}
 					}
 
-
-					function init() {
-						camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1, 999000);
-						camera.position.set(0, 0, 50);
-
-						camera.lookAt(-25,0, 0);
+					function addControls(){
 						controls = new THREE.TrackballControls( camera );
-						controls.rotateSpeed = 2.0;
+						controls.rotateSpeed = 4.0;
 						controls.zoomSpeed = 2.2;
 						controls.panSpeed = 2;
 
@@ -166,6 +164,13 @@ angular.module('edSystemMap', [])
 						controls.keys = [ 65, 83, 68 ];
 
 						controls.addEventListener( 'change', render );
+					}
+
+					function init() {
+						camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1, 999000);
+						camera.position.set(0, 0, 50);
+
+						camera.lookAt(-25,0, 0);
 
 						scene = new THREE.Scene();
 						toggleSceneLoading(true);
@@ -213,14 +218,14 @@ angular.module('edSystemMap', [])
 						if(isLoading){
 
 							uniforms = {
-										resolution:{ type: "v2", value: new THREE.Vector2(1,1)},
-										time: {type: "f", value: 1.0},
-										speed: {type: "f", value: 0.1},
-										baseRadius: {type: "f", value: 0.4},
-										backgroundColor:     { type: "v3", value: new THREE.Vector3( 0, 0, 0.5 ) },
-										brightnessVariation: {type: "f", value: 0.4},
-										colorVariation: {type: "f", value: 0.6},
-										variation: {type: "f", value: 8.0 }
+										speed: {type: "f", value: 0.2},
+										color: { type: "v3", value: new THREE.Vector3( 0.2784313725490196, 0.34509803921568627, 0.8196078431372549 ) },
+										brightness: {type: "f", value: 0.4},
+										radius: {type: "f", value: 0.3},
+										popSize: {type: "f", value: 0.05 },
+										baseSize: {type: "f", value: 0.9 },
+										uvScale:{ type: "v2", value: new THREE.Vector2(1,1)},
+										time: {type: "f", value: 1.0}
 									};
 
 									var shaderMaterial = new THREE.ShaderMaterial( {
@@ -230,17 +235,19 @@ angular.module('edSystemMap', [])
 									});
 
 									var material = new THREE.MeshNormalMaterial;
-									var loadingTextGeometry = new THREE.TextGeometry('Loading',{
-									    size: 7,
-											height:1,
-									    curveSegments: 3,
-									    font: 'helvetiker',
-									    weight: 'normal'
-									})
+									// var loadingTextGeometry = new THREE.TextGeometry('Loading',{
+									//     size: 7,
+									// 		height:1,
+									//     curveSegments: 3,
+									//     font: 'helvetiker',
+									//     weight: 'normal'
+									// })
 
-									loadingTextMesh = new THREE.Mesh( loadingTextGeometry, shaderMaterial );
+									var loadingPlaneGeometry = new THREE.PlaneGeometry(50,50,50);
+									loadingPlaneGeometry.lookAt( camera.position );
+
+									loadingTextMesh = new THREE.Mesh( loadingPlaneGeometry, shaderMaterial );
 									loadingTextMesh.position.set(-25,0, 0)
-									loadingTextMesh.lookAt( camera.position );
 									scene.add(loadingTextMesh);
 						}
 						else{
@@ -263,11 +270,13 @@ angular.module('edSystemMap', [])
 					}
 
 					function checkClickForIntersect(event){
-								var intersect = findIntersect(event);
-                if (!intersect) return;
-                var location = systemsService.systems[intersect.index];
-								stationsService.findStationsBySystemId(location.systemId);
-								$rootScope.$broadcast('selectedSystem:update', location);
+								if(!isLoading){
+									var intersect = findIntersect(event);
+	                if (!intersect) return;
+	                var location = systemsService.systems[intersect.index];
+									stationsService.findStationsBySystemId(location.systemId);
+									$rootScope.$broadcast('selectedSystem:update', location);
+								}
 					}
 
 					function flyToSystem(location){
@@ -325,8 +334,10 @@ angular.module('edSystemMap', [])
 					}
 
 					function animate(time) {
+						if(!isLoading){
+							controls.update();
+						}
 						requestAnimationFrame(animate);
-						controls.update();
             TWEEN.update(time);
 						render();
 					}
