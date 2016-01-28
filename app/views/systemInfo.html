@@ -1,49 +1,69 @@
-<div class="container">
+<div class="container-fluid">
   <div class="row">
-    <div class="col-sm-12 systemInfoHeader">System Information</div>
+    <div class="col-md-12" style="padding: 1px 1px 1px 1px;">
+      <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">System Information</div>
+
+        <!-- Table -->
+        <table class="table table-bordered">
+          <tr>
+            <td style="width:150px;">System Name</td>
+            <td>{{selectedSystem.name}}</td>
+          </tr>
+          <tr>
+            <td style="width:150px;">Allegiance</td>
+            <td>{{selectedSystem.allegiance}}</td>
+          </tr>
+          <tr>
+            <td style="width:150px;">Faction</td>
+            <td>{{selectedSystem.faction}}</td>
+          </tr>
+          <tr>
+            <td style="width:150px;">Government</td>
+            <td>{{selectedSystem.government}}</td>
+          </tr>
+          <tr>
+            <td style="width:150px;">Needs Permit</td>
+            <td>{{selectedSystem.permit}}</td>
+          </tr>
+          <tr>
+            <td style="width:150px;">Population</td>
+            <td>{{selectedSystem.population | number}}</td>
+          </tr>
+          <tr>
+            <td style="width:150px;">Power</td>
+            <td>{{selectedSystem.power}}</td>
+          </tr>
+          <tr>
+            <td style="width:150px;">State</td>
+            <td>{{selectedSystem.state}}</td>
+          </tr>
+          <tr>
+            <td style="width:150px;">Economy</td>
+            <td>{{selectedSystem.economy}}</td>
+          </tr>
+          <tr>
+            <td style="width:150px;">Security</td>
+            <td>{{selectedSystem.security}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
   </div>
+
   <div class="row">
-    <div class="col-sm-2 infoLabel no-margin">System Name: </div>
-    <div class="col-sm-10 infoItem">{{selectedSystem.name}}</div>
+    <div class="col-md-12" style="padding: 1px 1px 1px 1px">
+      <div class="panel panel-default">
+          <div class="panel-heading">
+              <h3 class="panel-title">Stations</h3>
+          </div>
+          <ul class="list-group">
+              <a class="list-group-item" ng-if="(stations.length === 0) && (isLoading !== true)">No station data</a>
+              <a class="list-group-item mousePointer" style="color: #dddddd;" ng-repeat="station in stations" style="padding: 0px 15px;"  ng-click="open(station, selectedSystem)">{{station.name}}</a>
+          </ul>
+      </div>
+    </div>
   </div>
-  <div class="row">
-    <div class="col-sm-2 infoLabel no-margin">Allegiance: </div>
-    <div class="col-sm-10 infoItem">{{selectedSystem.allegiance}}</div>
-  </div>
-  <div class="row">
-    <div class="col-sm-2 infoLabel no-margin">Faction: </div>
-    <div class="col-sm-10 infoItem">{{selectedSystem.faction}}</div>
-  </div>
-  <div class="row">
-    <div class="col-sm-2 infoLabel no-margin">Government: </div>
-    <div class="col-sm-10 infoItem">{{selectedSystem.government}}</div>
-  </div>
-  <div class="row">
-    <div class="col-sm-2 infoLabel no-margin">Needs Permit: </div>
-    <div class="col-sm-10 infoItem">{{selectedSystem.permit}}</div>
-  </div>
-  <div class="row">
-    <div class="col-sm-2 infoLabel no-margin">Population: </div>
-    <div class="col-sm-10 infoItem">{{selectedSystem.population | number}}</div>
-  </div>
-  <div class="row">
-    <div class="col-sm-2 infoLabel no-margin">Power: </div>
-    <div class="col-sm-10 infoItem">{{selectedSystem.power}}</div>
-  </div>
-  <div class="row">
-    <div class="col-sm-2 infoLabel no-margin">Power State: </div>
-    <div class="col-sm-10 infoItem">{{selectedSystem.state}}</div>
-  </div>
-  <div class="row">
-    <div class="col-sm-2 infoLabel no-margin">Primary Economy: </div>
-    <div class="col-sm-10 infoItem">{{selectedSystem.economy}}</div>
-  </div>
-  <div class="row">
-    <div class="col-sm-2 infoLabel no-margin">Security: </div>
-    <div class="col-sm-10 infoItem">{{selectedSystem.security}}</div>
-  </div>
-  <div class="row">
-    <div class="col-sm-2 infoLabel no-margin">State: </div>
-    <div class="col-sm-10 infoItem">{{selectedSystem.state}}</div>
-  </div>
+      <loading-spinner ng-if="isLoading"></loading-spinner>
 </div>

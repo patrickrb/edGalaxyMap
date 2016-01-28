@@ -14,11 +14,11 @@ Next, install npm packages and bower dependencies
 
 Launch your application in development mode for livereload
 
-    $ grunt
+    $ grunt serve
 
 For production
 
-    $ node server
+    $ node server/edGalaxy.js
 
 [1]: https://angularjs.org/
 [2]: http://threejs.org/

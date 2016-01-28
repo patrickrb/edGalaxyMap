@@ -10,9 +10,9 @@ ed-system-map{
 
 system-info{
   z-index: 4;
-  height:400px;
+  height:100%;
   position:absolute;
-  top:0;
+  top:52px;
   right:0;
   width:300px;
   background-color: #222222;
@@ -24,6 +24,8 @@ system-info{
   color:#ffffff;
   border-bottom: 1px solid #dddddd;
 }
+
+
 
 .infoLabel{
   color:#eeeeee;
@@ -52,3 +54,92 @@ canvas {
         visibility: hidden;
         display: none;
     }
+
+#edNavBar{
+  margin-bottom: 0px;
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+}
+
+#edNavBar  img {
+  width: 32px;
+margin-top: 10px;
+}
+
+#searchSystemListItem {
+  margin-top: 4px;
+}
+
+.typeahead-demo .custom-popup-wrapper {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  background-color: #f9f9f9;
+}
+
+.typeahead-demo .custom-popup-wrapper > .message {
+  padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
+  color: #868686;
+}
+
+.typeahead-demo .custom-popup-wrapper > .dropdown-menu {
+  position: static;
+  float: none;
+  display: block;
+  min-width: 160px;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.loadingCircle {
+  width: 80px;
+  height: 80px;
+  border-radius: 40px;
+  box-sizing: border-box;
+  border: 10px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #FFF;
+  animation: spin 1s infinite linear;
+}
+
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingContainer {
+   position: relative;
+   display: inline-block;
+   padding: 30px;
+   width: 80px;
+   height: 80px;
+ }
+
+ loading-spinner{
+   position: absolute;
+   margin-left: 65px;
+ }
+
+ .green{
+   color: #029e4c;
+ }
+
+ .red{
+   color: #ff0000;
+ }
+
+ .tableBorderLeft{
+   border-left: 1px solid #ffffff;
+ }
+
+ .mousePointer{
+   cursor: pointer;
+ }
