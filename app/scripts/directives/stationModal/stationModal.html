@@ -1,0 +1,68 @@
+
+       <div class="modal-header">
+           <h3 class="modal-title">Systems > {{system.name}} > {{station.name}}</h3>
+       </div>
+       <div class="modal-body">
+         <div class="row">
+          <table class="table table-condensed">
+            <tr>
+              <td>Distance To Star</td>
+              <td>{{station.distance_to_star}} LS</td>
+              <td class="tableBorderLeft">Economies</td>
+              <td><div ng-repeat="economy in station.economies">{{economy}} &nbsp &nbsp</div></td>
+            </tr>
+            <tr>
+              <td>Type</td>
+              <td>{{station.type}}</td>
+              <td class="tableBorderLeft">Imports</td>
+              <td><div ng-repeat="import in station.import_commodities">{{import}} &nbsp &nbsp</div></td>
+            </tr>
+            <tr>
+              <td>Max Landing</td>
+              <td>{{station.max_landing_pad_size}}</td>
+              <td class="tableBorderLeft">Exports</td>
+              <td><div ng-repeat="export in station.export_commodities">{{export}} &nbsp &nbsp</div></td>
+            </tr>
+            <tr>
+              <td>Facilities</td>
+              <td>
+                <span ng-class="station.has_shipyard ? 'green' : 'red'"><i class="fa fa-space-shuttle" title="Shipyard"></i></span>
+                <span ng-class="station.has_outfitting ? 'green' : 'red'"><i class="fa fa-cog" title="Outfitting"></i></span>
+                <span ng-class="station.has_rearm ? 'green' : 'red'"><i class="fa fa-crosshairs" title="Re-arm"></i></span>
+                <span ng-class="station.has_refuel ? 'green' : 'red'"><i class="fa fa-tint" title="Refuel"></i></span>
+                <span ng-class="station.has_repair ? 'green' : 'red'"><i class="fa fa-wrench" title="Repair"></i></span>
+                <span ng-class="station.has_blackmarket ? 'green' : 'red'"><i class="fa fa-money" title="blackmarket"></i></span>
+              </td>
+              <td class="tableBorderLeft">Prohibited</td>
+              <td><div ng-repeat="prohibited in station.prohibited_commodities">{{prohibited}} &nbsp &nbsp</div></td>
+            </tr>
+            <tr>
+              <td>Allegiance</td>
+              <td>{{station.allegiance}}</td>
+              <td class="tableBorderLeft">Ships</td>
+              <td style="max-width:150px;"><span ng-repeat="ship in station.selling_ships">{{ship}} &nbsp &nbsp</span></td>
+            </tr>
+            <tr>
+              <td>Government</td>
+              <td>{{station.government}}</td>
+              <td class="tableBorderLeft"></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>State</td>
+              <td>{{station.state}}</td>
+              <td class="tableBorderLeft"></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Faction</td>
+              <td>{{station.faction}}</td>
+              <td class="tableBorderLeft"></td>
+              <td></td>
+            </tr>
+          </table>
+        </div>
+       </div>
+       <div class="modal-footer">
+           <button class="btn btn-warning" type="button" ng-click="cancel()">Close</button>
+       </div>

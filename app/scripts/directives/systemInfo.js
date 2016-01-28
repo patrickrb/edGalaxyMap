@@ -1,5 +1,5 @@
 angular.module('systemInfo', [])
-	.directive('systemInfo',function ($q, systemsService, stationsService) {
+	.directive('systemInfo',function ($q, systemsService, stationsService, $uibModal) {
 			return {
 				restrict: 'E',
 				templateUrl: 'views/systemInfo.html',
@@ -19,6 +19,28 @@ angular.module('systemInfo', [])
 								 $scope.isLoading = false;
 							 }
 					 });
+
+
+					 $scope.open = function (station, selectedSystem) {
+						var modalInstance = $uibModal.open({
+							animation: $scope.animationsEnabled,
+							templateUrl: '/scripts/directives/stationModal/stationModal.html',
+							controller: 'StationModalCtrl',
+							size: 'lg',
+							resolve: {
+								station: function () {
+									return station;
+								},
+								system: function(){
+									return $scope.selectedSystem;
+								}
+							}
+						});
+
+						modalInstance.result.then(function () {
+						}, function () {
+						});
+					};
         }
       }
     });

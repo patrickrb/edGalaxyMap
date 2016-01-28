@@ -127,3 +127,19 @@ margin-top: 10px;
    position: absolute;
    margin-left: 65px;
  }
+
+ .green{
+   color: #029e4c;
+ }
+
+ .red{
+   color: #ff0000;
+ }
+
+ .tableBorderLeft{
+   border-left: 1px solid #ffffff;
+ }
+
+ .mousePointer{
+   cursor: pointer;
+ }
