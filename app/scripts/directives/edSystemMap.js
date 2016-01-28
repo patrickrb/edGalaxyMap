@@ -274,12 +274,12 @@ angular.module('edSystemMap', [])
 									var intersect = findIntersect(event);
 	                if (!intersect) return;
 	                var location = systemsService.systems[intersect.index];
-									stationsService.findStationsBySystemId(location.systemId);
 									$rootScope.$broadcast('selectedSystem:update', location);
 								}
 					}
 
 					function flyToSystem(location){
+										stationsService.findStationsBySystemId(location.systemId);
                     var whichZ = () => {
                         return camera.position.z > 0 ? 10 : -10;
                     };
