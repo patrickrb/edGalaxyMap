@@ -19,7 +19,6 @@ mongoose.connection.on('error', function(err) {
     app.use(require('connect-livereload')());
     app.use(express.static(path.join(rootDir, 'app')));
     app.set('appPath', path.join(rootDir, 'app'));
-		app.use(compression())
 
 
 require('./routes')(app);
