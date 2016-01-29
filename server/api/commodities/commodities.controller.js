@@ -14,9 +14,7 @@ var Commodities = require('./commodities.model');
 
 // Get list of commodity
 exports.index = function(req, res) {
-  console.log('getting commodities');
   Commodities.find(function (err, commodities) {
-    console.log('found commodities: ', commodities);
     if(err) { return handleError(res, err); }
     return res.status(200).json(commodities);
   });
