@@ -13,6 +13,7 @@ module.exports = function(app) {
   app.use('/api/systems', require('./api/systems'));
   app.use('/api/stations', require('./api/stations'));
   app.use('/api/commodities', require('./api/commodities'));
+  app.use('/api/modules', require('./api/modules'));
 
 
 
