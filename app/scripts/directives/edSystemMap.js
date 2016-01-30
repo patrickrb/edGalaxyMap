@@ -1,4 +1,4 @@
-angular.module('edSystemMap', [])
+angular.module('edGalaxyMap')
 	.directive('edSystemMap',function ($q, systemsService, $rootScope, stationsService) {
 			return {
 				restrict: 'E',
