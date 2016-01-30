@@ -2,6 +2,8 @@
   "name": "temp",
   "version": "0.0.0",
   "dependencies": {
+    "async": "^1.5.2",
+    "bluebird": "^3.1.5",
     "connect-livereload": "^0.5.4",
     "express": "^4.13.3",
     "lodash": "^4.0.0",

@@ -10,8 +10,10 @@
 'use strict';
 
 var _ = require('lodash');
+var Promise = require('bluebird');
 var Listings = require('./listings.model');
-
+var Commodities = require('../commodities/commodities.model');
+var Async = require('async');
 // Get list of listing
 exports.index = function(req, res) {
   Listings.find(function (err, listings) {
@@ -36,7 +38,13 @@ exports.listingsByStationId = function(req, res) {
   .exec(function(err, listings) {
     if(err) { return handleError(res, err); }
     if(!listings) { return res.status(404).send('Not Found'); }
-    return res.json(listings);
+    if(listings){
+      attachCommodityData(listings)
+      .then(function(data){
+        return res.json(data);
+      })
+    }
+    // return res.json(listings);
   });
 };
 
@@ -73,6 +81,25 @@ exports.destroy = function(req, res) {
     });
   });
 };
+
+function attachCommodityData(listings){
+  var returnArray = [];
+  return new Promise(function(resolve, reject){
+    Async.each(listings, function (listing, callback){
+      Commodities.findOne({id:listing.commodity_id}).exec(function(err, commodities){
+        var newListing = {
+          "listing" : listing,
+          "commodityData": commodities
+        }
+        returnArray.push(newListing);
+        callback();
+      });
+
+    },function(err){
+      resolve(returnArray);
+    });
+  })
+}
 
 function handleError(res, err) {
   return res.status(500).send(err);
