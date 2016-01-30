@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('edGalaxyMap', ['edSystemMap', 'systemInfo', 'navbar','ui.bootstrap', 'ui.gravatar', 'loadingSpinner', 'ngRoute'])
+angular.module('edGalaxyMap', ['ui.bootstrap', 'ui.gravatar', 'ngRoute'])
 	.config(function ($routeProvider) {
 		$routeProvider
 			.when('/', {

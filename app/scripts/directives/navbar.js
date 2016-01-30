@@ -1,4 +1,4 @@
-angular.module('navbar', [])
+angular.module('edGalaxyMap')
 	.directive('navbar',function ($rootScope, $q, systemsService) {
 			return {
 				restrict: 'E',

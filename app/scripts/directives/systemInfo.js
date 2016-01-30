@@ -1,4 +1,4 @@
-angular.module('systemInfo', [])
+angular.module('edGalaxyMap')
 	.directive('systemInfo',function ($q, systemsService, stationsService, $uibModal) {
 			return {
 				restrict: 'E',
