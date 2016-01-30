@@ -63,7 +63,7 @@ angular.module('edSystemMap', [])
 
 					function loadSystems() {
 						toggleSceneLoading(false);
-						var texture = THREE.ImageUtils.loadTexture('models/particle.png');
+						var texture = THREE.ImageUtils.loadTexture('models/circle.png');
 						texture.minFilter = THREE.LinearFilter;
 						uniforms = {
 
@@ -81,7 +81,8 @@ angular.module('edSystemMap', [])
 							fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
 
 							blending:       THREE.AdditiveBlending,
-							depthTest:      false,
+							depthTest:      true,
+							depthWrite:     false,
 							transparent:    true
 
 						});
@@ -120,14 +121,15 @@ angular.module('edSystemMap', [])
 
 						particleSystem = new THREE.Points( geometry, shaderMaterial );
 
-
+						particleSystem.sortParticles = true;
+						particleSystem.dynamic = true;
 						scene.add(particleSystem);
 						isLoading = false;
 						addControls();
 					}
 
 					function onMouseMove( event ) {
-						event.preventDefault();
+						// event.preventDefault();
 
             var $target = $(event.target);
 						// calculate mouse position in normalized device coordinates
@@ -150,7 +152,7 @@ angular.module('edSystemMap', [])
 					}
 
 					function addControls(){
-						controls = new THREE.TrackballControls( camera );
+						controls = new THREE.TrackballControls( camera, elem[0] );
 						controls.rotateSpeed = 4.0;
 						controls.zoomSpeed = 2.2;
 						controls.panSpeed = 2;
