@@ -2,12 +2,13 @@
   "name": "temp",
   "version": "0.0.0",
   "dependencies": {
-    "compression": "^1.6.1",
-    "connect": "^3.4.0",
+    "async": "^1.5.2",
+    "bluebird": "^3.1.5",
     "connect-livereload": "^0.5.4",
     "express": "^4.13.3",
     "lodash": "^4.0.0",
     "mongoose": "^4.3.6",
+    "request": "^2.69.0",
     "serve-static": "^1.10.1"
   },
   "devDependencies": {
