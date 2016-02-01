@@ -3,9 +3,9 @@
                <img id="logo-img" class="logo-img" src="favicon.ico" />
                <h3>Elite Dangerous Universe</h3>
                <form class="form-signin">
-                   <input type="email" id="inputEmail" class="form-control" placeholder="email" required autofocus>
-                   <input type="password" id="inputPassword" class="form-control" placeholder="password" required>
-                   <button class="btn btn-lg btn-warning btn-block btn-signin" type="submit">login</button>
+                   <input type="input" ng-model="user.email" id="inputEmail" class="form-control" placeholder="email" autofocus>
+                   <input type="password" ng-model="user.password" id="inputPassword" class="form-control" placeholder="password">
+                   <button class="btn btn-lg btn-warning btn-block btn-signin" type="submit" ng-click="login(user)">login</button>
                </form><!-- /form -->
                <div class="signin-help">
              <p>forgot your password? <a href="#">click here</a></p>

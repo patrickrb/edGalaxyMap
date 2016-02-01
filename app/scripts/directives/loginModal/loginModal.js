@@ -1,10 +1,14 @@
-angular.module('edGalaxyMap').controller('LoginModalCtrl', function ($scope, $uibModalInstance) {
+angular.module('edGalaxyMap').controller('LoginModalCtrl', function ($scope, $uibModalInstance, loginService) {
 
+  $scope.user = {
+    email: null,
+    password: null
+  }
 
-
-  $scope.ok = function () {
-    console.log('ok clicked');
-    $uibModalInstance.close();
+  $scope.login = function (user) {
+    console.log('loggin in user: ', user);
+    loginService.login(user);
+    // $uibModalInstance.close();
   };
 
   $scope.cancel = function () {

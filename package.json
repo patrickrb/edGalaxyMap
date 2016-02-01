@@ -4,11 +4,16 @@
   "dependencies": {
     "async": "^1.5.2",
     "bluebird": "^3.1.5",
+    "body-parser": "^1.14.2",
+    "composable-middleware": "^0.3.0",
     "connect-livereload": "^0.5.4",
     "express": "^4.13.3",
+    "express-jwt": "^3.3.0",
+    "jsonwebtoken": "^5.5.4",
     "lodash": "^4.0.0",
     "mongoose": "^4.3.6",
     "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
     "request": "^2.69.0",
     "serve-static": "^1.10.1"
   },

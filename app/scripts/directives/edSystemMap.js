@@ -3,11 +3,11 @@ angular.module('edGalaxyMap')
 			return {
 				restrict: 'E',
 				link: function (scope, elem, attr) {
+					window.scene;
 					var camera;
 					var controls;
 					var colors = [];
 					var particles = [];
-					var scene;
 					var uniforms;
 					var renderer;
 					var loadingTextMesh;
@@ -30,7 +30,7 @@ angular.module('edGalaxyMap')
 					var INTERSECTED;
 					//load galaxy data
 					systemsService.init();
-					//init the scene
+					//init the window.scene
 					init();
 					animate();
 
@@ -80,11 +80,9 @@ angular.module('edGalaxyMap')
 							uniforms:       uniforms,
 							vertexShader:   document.getElementById( 'vertexshader' ).textContent,
 							fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
-
-							blending:       THREE.AdditiveBlending,
 							depthTest:      true,
 							depthWrite:     false,
-							transparent:    true
+							transparent:    false
 
 						});
 
@@ -124,7 +122,7 @@ angular.module('edGalaxyMap')
 
 						particleSystem.sortParticles = true;
 						particleSystem.dynamic = true;
-						scene.add(particleSystem);
+						window.scene.add(particleSystem);
 						isLoading = false;
 						addControls();
 					}
@@ -171,7 +169,7 @@ angular.module('edGalaxyMap')
             targetCircle.add(new THREE.Line(targetCircleGeo, targetLineMaterial));
             targetCircle.visible = false;
             targetCircle.name = 'targetCircle';
-						scene.add(targetCircle);
+						window.scene.add(targetCircle);
 					}
 
 					function addSelectedSystemIcon(){
@@ -185,7 +183,7 @@ angular.module('edGalaxyMap')
 						selectedSystemIcon.name = "selectedSystemIcon";
 						selectedSystemIcon.visible = false;
 						selectedSystemIcon.scale.set(1,1.5,1);
-						scene.add( selectedSystemIcon );
+						window.scene.add( selectedSystemIcon );
 					}
 
 					function init() {
@@ -194,7 +192,7 @@ angular.module('edGalaxyMap')
 
 						camera.lookAt(-25,0, 0);
 
-						scene = new THREE.Scene();
+						window.scene = new THREE.Scene();
 						toggleSceneLoading(true);
 
 						addTargetCircle();
@@ -241,10 +239,10 @@ angular.module('edGalaxyMap')
 
 									loadingTextMesh = new THREE.Mesh( loadingPlaneGeometry, shaderMaterial );
 									loadingTextMesh.position.set(-25,0, 0)
-									scene.add(loadingTextMesh);
+									window.scene.add(loadingTextMesh);
 						}
 						else{
-							scene.remove(loadingTextMesh);
+							window.scene.remove(loadingTextMesh);
 						}
 					}
 
@@ -307,7 +305,7 @@ angular.module('edGalaxyMap')
 
 					function findIntersect(event) {
 							raycaster.setFromCamera(mouse, camera);
-							var intersects = raycaster.intersectObjects(scene.children);
+							var intersects = raycaster.intersectObjects(window.scene.children);
 							if (Array.isArray(intersects) && intersects[0]) {
 									var intersect = intersects[0];
 									if(intersect.object.name === 'selectedSystemIcon'){
@@ -347,7 +345,7 @@ angular.module('edGalaxyMap')
 							selectedSystemIcon.position.copy( camera.position );
 							selectedSystemIcon.rotation.copy( camera.rotation );
 							selectedSystemIcon.updateMatrix();
-							selectedSystemIcon.translateZ( - 12 );
+							selectedSystemIcon.translateZ( - 30 );
 							selectedSystemIcon.translateY( + 0.7 );
 						}
 						requestAnimationFrame(animate);
@@ -365,7 +363,7 @@ angular.module('edGalaxyMap')
 	            renderer.autoClear = false;
 	            renderer.clear();
 	            // renderer.render(backgroundScene , backgroundCamera )
-							renderer.render(scene, camera);
+							renderer.render(window.scene, camera);
 					}
 				}
 			}

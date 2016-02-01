@@ -15,8 +15,9 @@ module.exports = function(app) {
   app.use('/api/commodities', require('./api/commodities'));
   app.use('/api/modules', require('./api/modules'));
   app.use('/api/listings', require('./api/listings'));
+  app.use('/api/user', require('./api/user'));
 
-
+  app.use('/auth', require('./auth'));
 
   // All other routes should redirect to the index.html
   app.route('/*')
