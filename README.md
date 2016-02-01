@@ -1,5 +1,5 @@
 # Elite Dangerous Galaxy Map
-##Preview: [http://galaxy.dracosyndicate.com][3]
+##Preview: [http://elitedangerousuniverse.com][3]
 Built with [Angular][1] and [Three.js][2]
 
 ## Quick Install

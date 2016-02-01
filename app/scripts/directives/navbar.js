@@ -1,9 +1,12 @@
 angular.module('edGalaxyMap')
-	.directive('navbar',function ($rootScope, $q, systemsService) {
+	.directive('navbar',function ($rootScope, $q, $uibModal, systemsService) {
 			return {
 				restrict: 'E',
 				templateUrl: 'views/navbar.html',
 				link: function ($scope, elem, attr) {
+
+						$scope.loggedIn = false;
+
             $scope.user = {
               email: 'burnsoft@gmail.com'
             }
@@ -20,6 +23,19 @@ angular.module('edGalaxyMap')
 									$scope.systems = systemsService.systems;
 								}
 				    });
+
+						$scope.openLoginModal = function () {
+						 var modalInstance = $uibModal.open({
+							 animation: $scope.animationsEnabled,
+							 templateUrl: '/scripts/directives/loginModal/loginModal.html',
+							 controller: 'LoginModalCtrl',
+							 size: 'md'
+						 });
+
+						 modalInstance.result.then(function () {
+						 }, function () {
+						 });
+					 };
         }
       }
     });

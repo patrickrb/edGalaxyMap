@@ -8,6 +8,7 @@
     "express": "^4.13.3",
     "lodash": "^4.0.0",
     "mongoose": "^4.3.6",
+    "passport": "^0.3.2",
     "request": "^2.69.0",
     "serve-static": "^1.10.1"
   },
