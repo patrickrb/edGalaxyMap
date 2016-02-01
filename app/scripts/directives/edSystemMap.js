@@ -150,12 +150,12 @@ angular.module('edGalaxyMap')
 
 					function addControls(){
 						controls = new THREE.TrackballControls( camera, elem[0] );
-						controls.rotateSpeed = 4.0;
+						controls.rotateSpeed = 10.0;
 						controls.zoomSpeed = 2.2;
 						controls.panSpeed = 2;
 
 						controls.noZoom = false;
-						controls.noPan = false;
+						controls.noPan = true;
 
 						controls.staticMoving = true;
 						controls.dynamicDampingFactor = 0.3;
@@ -184,6 +184,7 @@ angular.module('edGalaxyMap')
 						selectedSystemIcon = new THREE.Sprite( selectedSystemIconMaterial );
 						selectedSystemIcon.name = "selectedSystemIcon";
 						selectedSystemIcon.visible = false;
+						selectedSystemIcon.scale.set(1,2,1);
 						scene.add( selectedSystemIcon );
 					}
 
@@ -347,7 +348,7 @@ angular.module('edGalaxyMap')
 							selectedSystemIcon.rotation.copy( camera.rotation );
 							selectedSystemIcon.updateMatrix();
 							selectedSystemIcon.translateZ( - 10 );
-							selectedSystemIcon.translateY( + 0.5 );
+							selectedSystemIcon.translateY( + 1.0 );
 						}
 						requestAnimationFrame(animate);
             TWEEN.update(time);
