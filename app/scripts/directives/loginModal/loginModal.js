@@ -6,9 +6,8 @@ angular.module('edGalaxyMap').controller('LoginModalCtrl', function ($scope, $ui
   }
 
   $scope.login = function (user) {
-    console.log('loggin in user: ', user);
     loginService.login(user);
-    // $uibModalInstance.close();
+    $uibModalInstance.close();
   };
 
   $scope.cancel = function () {

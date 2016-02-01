@@ -1,16 +1,9 @@
 angular.module('edGalaxyMap')
-	.directive('navbar',function ($rootScope, $q, $uibModal, systemsService) {
+	.directive('navbar',function ($rootScope, $q, $uibModal, systemsService, loginService, $cookieStore) {
 			return {
 				restrict: 'E',
 				templateUrl: 'views/navbar.html',
 				link: function ($scope, elem, attr) {
-
-						$scope.loggedIn = false;
-
-            $scope.user = {
-              email: 'burnsoft@gmail.com'
-            }
-
 						$scope.changeSystem = function($item, $model, $label, $event){
 							$rootScope.$broadcast('selectedSystem:update', $item);
 						}
@@ -23,6 +16,22 @@ angular.module('edGalaxyMap')
 									$scope.systems = systemsService.systems;
 								}
 				    });
+
+						$scope.$watch(function() {
+								return loginService.isLoggedIn;
+						}, function(newVal, oldVal) {
+							if(loginService.isLoggedIn){
+								$scope.user = $cookieStore.get('user');
+								$scope.isLoggedIn = true
+							}
+							else{
+								$scope.isLoggedIn = false;
+							}
+						});
+
+						$scope.logout = function(){
+							loginService.logout();
+						}
 
 						$scope.openLoginModal = function () {
 						 var modalInstance = $uibModal.open({

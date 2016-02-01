@@ -38,11 +38,16 @@
                 <li><a>Search</a></li>
                 <li id="searchSystemListItem"><input type="text" id="searchSystemsInput" class="form-control" ng-model="selectedSystem" typeahead-on-select="changeSystem($item, $model, $label, $event)" uib-typeahead="system as system.name for system in systems | filter:$viewValue | limitTo:8" class="form-control" typeahead-show-hint="true" typeahead-min-length="2">
             </ul>
-            <ul class="nav navbar-nav navbar-right"  ng-if="loggedIn == true">
-              <li><img gravatar-src-once="user.email"></li>
-                <li><a>Patrick Burns</a></li>
+            <ul class="nav navbar-nav navbar-right"  ng-if="isLoggedIn">
+                <li><img gravatar-src-once="user.email"></li>
+                <li class="dropdown">
+                  <a uib-dropdown-toggle class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{user.name}}<span class="caret"></span></a>
+                  <ul uib-dropdown-menu class="dropdown-menu">
+                    <li ng-click="logout()"><a href="">Logout</a></li>
+                  </ul>
+                </li>
             </ul>
-            <ul class="nav navbar-nav navbar-right" ng-if="loggedIn == false">
+            <ul class="nav navbar-nav navbar-right" ng-if="!isLoggedIn">
               <li><a>Register</a></li>
               <li ng-click="openLoginModal()"><a>Login</a></li>
             </ul>
