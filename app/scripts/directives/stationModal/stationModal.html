@@ -78,7 +78,7 @@
             </thead>
             <tobdy>
               <tr ng-if="listings.length == 0">
-                <td colspan=6>No Market Data Found For {{station.name}}</td>
+                <td colspan=7>No Market Data Found For {{station.name}}</td>
               </tr>
               <tr ng-repeat="listing in listings | orderBy:'commodityData.category_id'">
                 <td>{{listing.commodityData.name}}</td>

@@ -184,7 +184,7 @@ angular.module('edGalaxyMap')
 						selectedSystemIcon = new THREE.Sprite( selectedSystemIconMaterial );
 						selectedSystemIcon.name = "selectedSystemIcon";
 						selectedSystemIcon.visible = false;
-						selectedSystemIcon.scale.set(1,2,1);
+						selectedSystemIcon.scale.set(1,1.5,1);
 						scene.add( selectedSystemIcon );
 					}
 
@@ -347,8 +347,8 @@ angular.module('edGalaxyMap')
 							selectedSystemIcon.position.copy( camera.position );
 							selectedSystemIcon.rotation.copy( camera.rotation );
 							selectedSystemIcon.updateMatrix();
-							selectedSystemIcon.translateZ( - 10 );
-							selectedSystemIcon.translateY( + 1.0 );
+							selectedSystemIcon.translateZ( - 12 );
+							selectedSystemIcon.translateY( + 0.7 );
 						}
 						requestAnimationFrame(animate);
             TWEEN.update(time);
