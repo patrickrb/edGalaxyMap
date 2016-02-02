@@ -1,5 +1,6 @@
 'use strict';
 
 angular.module('edGalaxyMap')
-	.controller('MainCtrl', function ($scope) {
+	.controller('MainCtrl', function ($scope, userService) {
+		userService.init();
 	});
