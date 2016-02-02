@@ -2,7 +2,7 @@ angular.module('edGalaxyMap')
 	.directive('loadingSpinner',function ($rootScope, $q, systemsService) {
 			return {
 				restrict: 'E',
-				templateUrl: 'views/loadingSpinner.html',
+				templateUrl: 'scripts/directives/loadingSpinner/loadingSpinner.html',
 				link: function ($scope, elem, attr) {
             $scope.user = {
               email: 'burnsoft@gmail.com'

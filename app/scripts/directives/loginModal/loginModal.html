@@ -1,14 +1,13 @@
-
-         <div class="card card-container">
-               <img id="logo-img" class="logo-img" src="favicon.ico" />
-               <h3>Elite Dangerous Universe</h3>
-               <form class="form-signin">
-                   <input type="input" ng-model="user.email" id="inputEmail" class="form-control" placeholder="email" autofocus>
-                   <input type="password" ng-model="user.password" id="inputPassword" class="form-control" placeholder="password">
-                   <button class="btn btn-lg btn-warning btn-block btn-signin" type="submit" ng-click="login(user)">login</button>
-               </form><!-- /form -->
-               <div class="signin-help">
-             <p>forgot your password? <a href="#">click here</a></p>
-             <p>new user? <a href="#">create new account</a></p>
-           </div>
-         </div>
+ <div class="card card-container">
+       <img id="logo-img" class="logo-img" src="favicon.ico" />
+       <h3 style="text-align: center">Login</h3>
+       <form class="form-signin">
+           <input type="input" ng-model="user.email" id="inputEmail" class="form-control" placeholder="email" autofocus>
+           <input type="password" ng-model="user.password" id="inputPassword" class="form-control" placeholder="password">
+           <button class="btn btn-lg btn-warning btn-block btn-signin" type="submit" ng-click="login(user)">Login</button>
+       </form><!-- /form -->
+       <div class="signin-help">
+     <p>forgot your password? <a href="">click here</a></p>
+     <p>new user? <a href="">create new account</a></p>
+   </div>
+ </div>

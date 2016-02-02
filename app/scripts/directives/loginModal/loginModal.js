@@ -1,4 +1,4 @@
-angular.module('edGalaxyMap').controller('LoginModalCtrl', function ($scope, $uibModalInstance, loginService) {
+angular.module('edGalaxyMap').controller('LoginModalCtrl', function ($scope, $uibModalInstance, userService) {
 
   $scope.user = {
     email: null,
@@ -6,7 +6,7 @@ angular.module('edGalaxyMap').controller('LoginModalCtrl', function ($scope, $ui
   }
 
   $scope.login = function (user) {
-    loginService.login(user);
+    userService.login(user);
     $uibModalInstance.close();
   };
 

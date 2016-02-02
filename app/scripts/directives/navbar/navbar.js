@@ -1,8 +1,8 @@
 angular.module('edGalaxyMap')
-	.directive('navbar',function ($rootScope, $q, $uibModal, systemsService, loginService, $cookieStore) {
+	.directive('navbar',function ($rootScope, $q, $uibModal, systemsService, userService, $cookieStore) {
 			return {
 				restrict: 'E',
-				templateUrl: 'views/navbar.html',
+				templateUrl: 'scripts/directives/navbar/navbar.html',
 				link: function ($scope, elem, attr) {
 						$scope.changeSystem = function($item, $model, $label, $event){
 							$rootScope.$broadcast('selectedSystem:update', $item);
@@ -18,9 +18,9 @@ angular.module('edGalaxyMap')
 				    });
 
 						$scope.$watch(function() {
-								return loginService.isLoggedIn;
+								return userService.isLoggedIn;
 						}, function(newVal, oldVal) {
-							if(loginService.isLoggedIn){
+							if(userService.isLoggedIn){
 								$scope.user = $cookieStore.get('user');
 								$scope.isLoggedIn = true
 							}
@@ -30,7 +30,7 @@ angular.module('edGalaxyMap')
 						});
 
 						$scope.logout = function(){
-							loginService.logout();
+							userService.logout();
 						}
 
 						$scope.openLoginModal = function () {
@@ -38,6 +38,20 @@ angular.module('edGalaxyMap')
 							 animation: $scope.animationsEnabled,
 							 templateUrl: '/scripts/directives/loginModal/loginModal.html',
 							 controller: 'LoginModalCtrl',
+							 size: 'md'
+						 });
+
+						 modalInstance.result.then(function () {
+						 }, function () {
+						 });
+					 };
+
+
+						$scope.openRegisterModal = function () {
+						 var modalInstance = $uibModal.open({
+							 animation: $scope.animationsEnabled,
+							 templateUrl: '/scripts/directives/registerModal/registerModal.html',
+							 controller: 'RegisterModalCtrl',
 							 size: 'md'
 						 });
 
