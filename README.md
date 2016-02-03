@@ -22,4 +22,4 @@ For production
 
 [1]: https://angularjs.org/
 [2]: http://threejs.org/
-[3]: http://galaxy.dracosyndicate.com
+[3]: http://elitedangerousuniverse.com
