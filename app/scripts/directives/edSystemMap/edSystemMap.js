@@ -15,6 +15,7 @@ angular.module('edGalaxyMap')
 					var clock = new THREE.Clock();
 					var particleSystem;
 					var raycaster;
+					var geometry;
 					var backgroundScene;
 					var backgroundCamera;
 					var mouse = new THREE.Vector2(0, 0);

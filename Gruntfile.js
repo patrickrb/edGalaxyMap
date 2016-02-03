@@ -13,6 +13,9 @@ module.exports = function(grunt) {
     require('time-grunt')(grunt);
     grunt.loadNpmTasks('grunt-wiredep');
     grunt.loadNpmTasks('grunt-injector');
+    grunt.loadNpmTasks('grunt-ng-annotate');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+
     // Configure the app path
     var base = 'app';
 
@@ -30,6 +33,33 @@ module.exports = function(grunt) {
                livereload: true
              }
            }
+         },
+         ngAnnotate: {
+            dev: {
+              files: { 'public/edGalaxyAnnotate.min.js': ['app/scripts/app.js', 'app/scripts/factories/**/*.js', 'app/scripts/services/**/*.js', 'app/scripts/controllers/main.js', 'app/scripts/directives/**/*.js']
+              }
+            }
+         },
+         babel: {
+             options: {
+                 sourceMap: true,
+                 presets: ['es2015']
+             },
+             dist: {
+                 files: {
+                     'public/edGalaxy.babel.js': 'public/edGalaxyAnnotate.min.js'
+                 }
+             }
+         },
+         uglify: {
+            dev: {
+                files: {
+                    'public/edGalaxy.min.js': ['public/edGalaxy.babel.js']
+                },
+                options: {
+                    mangle: true
+                }
+            }
          },
          wiredep: {
           task: {
@@ -126,6 +156,15 @@ module.exports = function(grunt) {
             'injector',
             'open:dev',
             'watch'
+        ]);
+    });
+
+    grunt.registerTask('build', function () {
+        grunt.task.run([
+            'wiredep',
+            'ngAnnotate',
+            'babel',
+            'uglify'
         ]);
     });
 

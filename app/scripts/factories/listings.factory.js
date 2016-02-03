@@ -1,5 +1,3 @@
-'use strict';
-
 angular.module('edGalaxyMap')
   .factory('listingsFactory', function ($http) {
       class ListingsFactory {
