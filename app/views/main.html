@@ -22,6 +22,7 @@
 			void main() {
 						gl_FragColor = vec4( color * vColor, 1.0 );
 						gl_FragColor = gl_FragColor * texture2D( texture, gl_PointCoord );
+		        if (gl_FragColor.w < 0.9) discard;
 			}
 		</script>
 

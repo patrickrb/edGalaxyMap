@@ -1,8 +1,8 @@
-angular.module('systemInfo', [])
+angular.module('edGalaxyMap')
 	.directive('systemInfo',function ($q, systemsService, stationsService, $uibModal) {
 			return {
 				restrict: 'E',
-				templateUrl: 'views/systemInfo.html',
+				templateUrl: 'scripts/directives/systemInfo/systemInfo.html',
 				link: function ($scope, elem, attr) {
           $scope.$on('selectedSystem:update', function(event,data) {
             $scope.selectedSystem = data;

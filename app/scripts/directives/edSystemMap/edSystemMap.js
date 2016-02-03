@@ -1,26 +1,27 @@
-angular.module('edSystemMap', [])
+angular.module('edGalaxyMap')
 	.directive('edSystemMap',function ($q, systemsService, $rootScope, stationsService) {
 			return {
 				restrict: 'E',
 				link: function (scope, elem, attr) {
+					window.scene;
 					var camera;
 					var controls;
 					var colors = [];
 					var particles = [];
-					var scene;
 					var uniforms;
 					var renderer;
 					var loadingTextMesh;
-					var previous;
 					var isLoading = true;
 					var clock = new THREE.Clock();
 					var particleSystem;
 					var raycaster;
+					var geometry;
 					var backgroundScene;
 					var backgroundCamera;
 					var mouse = new THREE.Vector2(0, 0);
 					var selectedNodes = [];
 					var systemNodeData = [];
+					var selectedSystemIcon;
 					var targetCircle = new THREE.Object3D();
 					var targetCircleGeo = new THREE.CircleGeometry(50, 64);
 					var targetLineMaterial = new THREE.LineBasicMaterial({
@@ -30,12 +31,13 @@ angular.module('edSystemMap', [])
 					var INTERSECTED;
 					//load galaxy data
 					systemsService.init();
-					//init the scene
+					//init the window.scene
 					init();
 					animate();
 
           scope.$on('selectedSystem:update', function(event,data) {
             scope.selectedSystem = data;
+						selectedSystemIcon.visible = false;
 						flyToSystem(scope.selectedSystem);
          });
 
@@ -63,14 +65,14 @@ angular.module('edSystemMap', [])
 
 					function loadSystems() {
 						toggleSceneLoading(false);
-						var texture = THREE.ImageUtils.loadTexture('models/particle.png');
+						var texture = THREE.ImageUtils.loadTexture('models/circle.png');
 						texture.minFilter = THREE.LinearFilter;
 						uniforms = {
 
 							color:     { type: "c", value: new THREE.Color( 0xffffff ) },
 							texture:   { type: "t", value: texture  },
 							scale: {type: "f", value: 1.0},
-							size: { type: "f", value: 500}
+							size: { type: "f", value: 100}
 
 						};
 
@@ -79,10 +81,9 @@ angular.module('edSystemMap', [])
 							uniforms:       uniforms,
 							vertexShader:   document.getElementById( 'vertexshader' ).textContent,
 							fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
-
-							blending:       THREE.AdditiveBlending,
-							depthTest:      false,
-							transparent:    true
+							depthTest:      true,
+							depthWrite:     false,
+							transparent:    false
 
 						});
 
@@ -120,18 +121,15 @@ angular.module('edSystemMap', [])
 
 						particleSystem = new THREE.Points( geometry, shaderMaterial );
 
-
-						scene.add(particleSystem);
+						particleSystem.sortParticles = true;
+						particleSystem.dynamic = true;
+						window.scene.add(particleSystem);
 						isLoading = false;
 						addControls();
 					}
 
 					function onMouseMove( event ) {
-						event.preventDefault();
-
             var $target = $(event.target);
-						// calculate mouse position in normalized device coordinates
-						// (-1 to +1) for both components
 						mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 						mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 						if(!isLoading){
@@ -150,20 +148,43 @@ angular.module('edSystemMap', [])
 					}
 
 					function addControls(){
-						controls = new THREE.TrackballControls( camera );
-						controls.rotateSpeed = 4.0;
+						controls = new THREE.TrackballControls( camera, elem[0] );
+						controls.rotateSpeed = 10.0;
 						controls.zoomSpeed = 2.2;
 						controls.panSpeed = 2;
 
 						controls.noZoom = false;
-						controls.noPan = false;
+						controls.noPan = true;
 
 						controls.staticMoving = true;
 						controls.dynamicDampingFactor = 0.3;
 
 						controls.keys = [ 65, 83, 68 ];
-
+						controls.minDistance = 5;
 						controls.addEventListener( 'change', render );
+					}
+
+					function addTargetCircle(){
+						targetCircleGeo = new THREE.CircleGeometry(1, 64);
+            targetCircleGeo.vertices.shift();
+            targetCircle.add(new THREE.Line(targetCircleGeo, targetLineMaterial));
+            targetCircle.visible = false;
+            targetCircle.name = 'targetCircle';
+						window.scene.add(targetCircle);
+					}
+
+					function addSelectedSystemIcon(){
+						var selectedSystemIconTexture = THREE.ImageUtils.loadTexture('images/icons/map/Marker-galaxy-map-green.png');
+						var selectedSystemIconMaterial = new THREE.SpriteMaterial({
+							map: selectedSystemIconTexture,
+							color: 0xffffff,
+							transparent: true
+						});
+						selectedSystemIcon = new THREE.Sprite( selectedSystemIconMaterial );
+						selectedSystemIcon.name = "selectedSystemIcon";
+						selectedSystemIcon.visible = false;
+						selectedSystemIcon.scale.set(1,1.5,1);
+						window.scene.add( selectedSystemIcon );
 					}
 
 					function init() {
@@ -172,37 +193,17 @@ angular.module('edSystemMap', [])
 
 						camera.lookAt(-25,0, 0);
 
-						scene = new THREE.Scene();
+						window.scene = new THREE.Scene();
 						toggleSceneLoading(true);
-						targetCircleGeo = new THREE.CircleGeometry(1, 64);
-            targetCircleGeo.vertices.shift();
-            targetCircle.add(new THREE.Line(targetCircleGeo, targetLineMaterial));
-            targetCircle.visible = false;
-            targetCircle.name = 'targetCircle';
-						scene.add(targetCircle);
+
+						addTargetCircle();
+						addSelectedSystemIcon();
 
 						raycaster = new THREE.Raycaster();
-						raycaster.params.PointCloud.threshold = .3;
-						// raycaster.near = 5;
-						// Renderer
+						raycaster.params.PointCloud.threshold = 0.5;
 						renderer = new THREE.WebGLRenderer();
 						renderer.setSize(window.innerWidth, window.innerHeight);
 						renderer.sortObjects = true;
-
-						// var texture = THREE.ImageUtils.loadTexture( 'models/background.jpg' );
-						// var backgroundMesh = new THREE.Mesh(
-            // new THREE.PlaneGeometry(2, 2, 0),
-            // new THREE.MeshBasicMaterial({
-            //     map: texture
-            // }));
-						//
-						// backgroundMesh .material.depthTest = false;
-        		// backgroundMesh .material.depthWrite = false;
-						//
-						// backgroundScene = new THREE.Scene();
-		      	// backgroundCamera = new THREE.Camera();
-		        // backgroundScene.add(backgroundCamera );
-		        // backgroundScene.add(backgroundMesh );
 
 						elem[0].appendChild(renderer.domElement);
 
@@ -234,24 +235,15 @@ angular.module('edSystemMap', [])
 										fragmentShader: document.getElementById( 'dotFragmentShader' ).textContent
 									});
 
-									var material = new THREE.MeshNormalMaterial;
-									// var loadingTextGeometry = new THREE.TextGeometry('Loading',{
-									//     size: 7,
-									// 		height:1,
-									//     curveSegments: 3,
-									//     font: 'helvetiker',
-									//     weight: 'normal'
-									// })
-
 									var loadingPlaneGeometry = new THREE.PlaneGeometry(50,50,50);
 									loadingPlaneGeometry.lookAt( camera.position );
 
 									loadingTextMesh = new THREE.Mesh( loadingPlaneGeometry, shaderMaterial );
 									loadingTextMesh.position.set(-25,0, 0)
-									scene.add(loadingTextMesh);
+									window.scene.add(loadingTextMesh);
 						}
 						else{
-							scene.remove(loadingTextMesh);
+							window.scene.remove(loadingTextMesh);
 						}
 					}
 
@@ -279,16 +271,20 @@ angular.module('edSystemMap', [])
 					}
 
 					function flyToSystem(location){
+										selectedSystemIcon.position.set(location);
 										stationsService.findStationsBySystemId(location.systemId);
                     var whichZ = () => {
-                        return camera.position.z > 0 ? 10 : -10;
+                        return camera.position.z > 0 ? 5 : -5;
                     };
                     var tween = new TWEEN.Tween(camera.position).to({
-                        x: location.x + 10,
-                        y: location.y + 10,
+                        x: location.x + 5,
+                        y: location.y + 5,
                         z: location.z + whichZ()
                     })
 										.easing(TWEEN.Easing.Linear.None)
+										.onComplete(function(){
+												selectedSystemIcon.visible = true;
+										})
 										.start();
                     var tween = new TWEEN.Tween(controls.target).to({
                         x: location.x,
@@ -307,15 +303,26 @@ angular.module('edSystemMap', [])
               }.bind(this));
           }
 
+
 					function findIntersect(event) {
 							raycaster.setFromCamera(mouse, camera);
-							var intersects = raycaster.intersectObjects(scene.children);
+							var intersects = raycaster.intersectObjects(window.scene.children);
 							if (Array.isArray(intersects) && intersects[0]) {
 									var intersect = intersects[0];
-									var location = systemsService.systems[intersect.index];
-									addLabel(event, location.name);
-									setTargetPosition(location);
-									return intersect;
+									if(intersect.object.name === 'selectedSystemIcon'){
+										if(intersects[1]){
+											intersect = intersects[1];
+										}
+										else{
+											return false;
+										}
+									}
+									else{
+										var location = systemsService.systems[intersect.index];
+										addLabel(event, location.name);
+										setTargetPosition(location);
+										return intersect;
+									}
 							} else {
 									return false;
 							}
@@ -336,6 +343,11 @@ angular.module('edSystemMap', [])
 					function animate(time) {
 						if(!isLoading){
 							controls.update();
+							selectedSystemIcon.position.copy( camera.position );
+							selectedSystemIcon.rotation.copy( camera.rotation );
+							selectedSystemIcon.updateMatrix();
+							selectedSystemIcon.translateZ( - 30 );
+							selectedSystemIcon.translateY( + 0.7 );
 						}
 						requestAnimationFrame(animate);
             TWEEN.update(time);
@@ -352,7 +364,7 @@ angular.module('edSystemMap', [])
 	            renderer.autoClear = false;
 	            renderer.clear();
 	            // renderer.render(backgroundScene , backgroundCamera )
-							renderer.render(scene, camera);
+							renderer.render(window.scene, camera);
 					}
 				}
 			}

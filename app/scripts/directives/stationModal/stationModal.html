@@ -62,6 +62,36 @@
             </tr>
           </table>
         </div>
+        <div class="row">
+            <loading-spinner ng-if="isLoading" style="top: 83%; left: 39%;"></loading-spinner>
+          <table class="table table-striped" ng-if="!isLoading">
+            <thead class="thead-inverse">
+              <tr>
+                <td>Commodity</td>
+                <td>Sell</td>
+                <td>Demand</td>
+                <td>Buy</td>
+                <td>Supply</td>
+                <td>Galactic Average</td>
+                <td>Category</td>
+              </tr>
+            </thead>
+            <tobdy>
+              <tr ng-if="listings.length == 0">
+                <td colspan=7>No Market Data Found For {{station.name}}</td>
+              </tr>
+              <tr ng-repeat="listing in listings | orderBy:'commodityData.category_id'">
+                <td>{{listing.commodityData.name}}</td>
+                <td>{{listing.listing.sell_price | number}} CR</td>
+                <td>{{listing.listing.demand | number}}</td>
+                <td>{{listing.listing.buy_price | number}} CR</td>
+                <td>{{listing.listing.supply | number}}</td>
+                <td>{{listing.commodityData.average_price | number}} CR</td>
+                <td>{{listing.commodityData.category.name}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
        </div>
        <div class="modal-footer">
            <button class="btn btn-warning" type="button" ng-click="cancel()">Close</button>
