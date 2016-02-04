@@ -24,6 +24,8 @@ angular.module('edGalaxyMap')
 					var selectedSystemIcon;
 					var targetCircle = new THREE.Object3D();
 					var targetCircleGeo = new THREE.CircleGeometry(50, 64);
+					var BASE_POINT_SIZE = 100;
+					var POP_SIZE_THRESHOLD = 1000000000 //population > than this will start scaling point size up
 					var targetLineMaterial = new THREE.LineBasicMaterial({
               color: '0xffffff'
           });
@@ -81,9 +83,8 @@ angular.module('edGalaxyMap')
 							uniforms:       uniforms,
 							vertexShader:   document.getElementById( 'vertexshader' ).textContent,
 							fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
-            	blending: THREE.AdditiveBlending,
-							depthTest:      false,
-							depthWrite:     false,
+							depthTest:      true,
+							depthWrite:     true,
 							transparent:    false
 						});
 
@@ -110,10 +111,12 @@ angular.module('edGalaxyMap')
 						var noEconomyColor = 0x666666;
 
 						for ( var i = 0, i3 = 0; i < systemsService.systems.length; i ++, i3 += 3 ) {
+
 							var currentEconomy = systemsService.systems[i].primary_economy;
-							positions[ i3 + 0 ] = systemsService.systems[i].x;
-							positions[ i3 + 1 ] = systemsService.systems[i].y;
-							positions[ i3 + 2 ] = systemsService.systems[i].z;
+							var system = systemsService.systems[i];
+							positions[ i3 + 0 ] = system.x;
+							positions[ i3 + 1 ] = system.y;
+							positions[ i3 + 2 ] = system.z;
 
 							if(currentEconomy == 'Extraction'){
 								color.setHex( extractionColor );
@@ -153,14 +156,15 @@ angular.module('edGalaxyMap')
 							colors[ i3 + 1 ] = color.g;
 							colors[ i3 + 2 ] = color.b;
 
-							sizes[ i ] = 20;
+							sizes[ i ] = getPopulationScaleForSystem(system);
 
 						}
 
 
 						geometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
 						geometry.addAttribute( 'customColor', new THREE.BufferAttribute( colors, 3 ) );
-						geometry.addAttribute( 'size', new THREE.BufferAttribute( sizes, 1 ) );
+						geometry.addAttribute( 'aSize', new THREE.BufferAttribute( sizes, 1 ) );
+						geometry.attributes.aSize.needsUpdate = true;
 
 						particleSystem = new THREE.Points( geometry, shaderMaterial );
 
@@ -169,6 +173,13 @@ angular.module('edGalaxyMap')
 						window.scene.add(particleSystem);
 						isLoading = false;
 						addControls();
+					}
+
+					function getPopulationScaleForSystem(system) {
+						if (system.population) {
+							return 25 * Math.max(system.population / POP_SIZE_THRESHOLD, 1.0);
+						}
+						return BASE_POINT_SIZE;
 					}
 
 					function onMouseMove( event ) {
@@ -208,7 +219,7 @@ angular.module('edGalaxyMap')
 					}
 
 					function addTargetCircle(){
-						targetCircleGeo = new THREE.CircleGeometry(1, 64);
+						targetCircleGeo = new THREE.CircleGeometry(0.004, 64);
             targetCircleGeo.vertices.shift();
             targetCircle.add(new THREE.Line(targetCircleGeo, targetLineMaterial));
             targetCircle.visible = false;
@@ -342,6 +353,8 @@ angular.module('edGalaxyMap')
               return $q(function (resolve, reject) {
                   targetCircle.visible = true;
 									targetCircle.lookAt( camera.position );
+									var popScale = getPopulationScaleForSystem( location );
+									targetCircle.scale.set( popScale, popScale, popScale );
                   return resolve(targetCircle.position.set(location.x, location.y, location.z))
               }.bind(this));
           }
