@@ -81,10 +81,10 @@ angular.module('edGalaxyMap')
 							uniforms:       uniforms,
 							vertexShader:   document.getElementById( 'vertexshader' ).textContent,
 							fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
-							depthTest:      true,
+            	blending: THREE.AdditiveBlending,
+							depthTest:      false,
 							depthWrite:     false,
 							transparent:    false
-
 						});
 
 
@@ -97,14 +97,57 @@ angular.module('edGalaxyMap')
 
 						var color = new THREE.Color();
 
-						for ( var i = 0, i3 = 0; i < systemsService.systems.length; i ++, i3 += 3 ) {
+						var extractionColor = 0xfe0000;
+						var refineryColor = 0xff7f00;
+						var industrialColor = 0xffff00;
+						var agricultureColor = 0x7fff00;
+						var terraFormingColor = 0x009901;
+						var highTechColor = 0x01ffff;
+						var colonyColor = 0x337eff;
+						var serviceColor = 0x0145ff;
+						var tourismColor = 0x6601e5;
+						var militaryColor = 0xe600e6;
+						var noEconomyColor = 0x666666;
 
+						for ( var i = 0, i3 = 0; i < systemsService.systems.length; i ++, i3 += 3 ) {
+							var currentEconomy = systemsService.systems[i].primary_economy;
 							positions[ i3 + 0 ] = systemsService.systems[i].x;
 							positions[ i3 + 1 ] = systemsService.systems[i].y;
 							positions[ i3 + 2 ] = systemsService.systems[i].z;
 
-
-							color.setHSL( i / systemsService.systems.length, 1.0, 0.5 );
+							if(currentEconomy == 'Extraction'){
+								color.setHex( extractionColor );
+							}
+							else if(currentEconomy == 'Refinery'){
+									color.setHex( refineryColor );
+							}
+							else if(currentEconomy == 'Industrial'){
+										color.setHex( industrialColor );
+							}
+							else if(currentEconomy == 'Agriculture'){
+										color.setHex( agricultureColor );
+							}
+							else if(currentEconomy == 'Terraforming'){
+										color.setHex( terraFormingColor );
+							}
+							else if(currentEconomy == 'High Tech'){
+										color.setHex( highTechColor );
+							}
+							else if(currentEconomy == 'Colony'){
+										color.setHex( colonyColor );
+							}
+							else if(currentEconomy == 'Service'){
+										color.setHex( serviceColor );
+							}
+							else if(currentEconomy == 'Tourism'){
+										color.setHex( tourismColor );
+							}
+							else if(currentEconomy == 'Military'){
+										color.setHex( militaryColor );
+							}
+							else{
+									color.setHex( noEconomyColor );
+							}
 
 							colors[ i3 + 0 ] = color.r;
 							colors[ i3 + 1 ] = color.g;
@@ -209,7 +252,7 @@ angular.module('edGalaxyMap')
 
 						// Events
 						window.addEventListener('resize', onWindowResize, false);
-						window.addEventListener('mousemove', onMouseMove, false);
+						elem[0].addEventListener('mousemove', onMouseMove, false);
 						elem[0].addEventListener('click', function (event) {
 							checkClickForIntersect(event);
 						});
