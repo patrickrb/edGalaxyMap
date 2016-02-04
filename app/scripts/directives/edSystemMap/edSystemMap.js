@@ -120,6 +120,7 @@ angular.module('edGalaxyMap')
 						geometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
 						geometry.addAttribute( 'customColor', new THREE.BufferAttribute( colors, 3 ) );
 						geometry.addAttribute( 'aSize', new THREE.BufferAttribute( sizes, 1 ) );
+						geometry.attributes.aSize.needsUpdate = true;
 
 						particleSystem = new THREE.Points( geometry, shaderMaterial );
 
