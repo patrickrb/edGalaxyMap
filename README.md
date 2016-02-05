@@ -20,6 +20,17 @@ For production
 
     $ node server/edGalaxy.js
 
+
+
+##Contributors
+
+[patrickrb][4]
+
+[csvurt][5]
+
+
 [1]: https://angularjs.org/
 [2]: http://threejs.org/
 [3]: http://elitedangerousuniverse.com
+[4]: https://github.com/patrickrb
+[5]: https://github.com/csvurt
