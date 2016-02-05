@@ -1,3 +1,4 @@
+[![Gitter](https://badges.gitter.im/patrickrb/edGalaxyMap.svg)](https://gitter.im/patrickrb/edGalaxyMap?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 # Elite Dangerous Galaxy Map
 ##Preview: [http://elitedangerousuniverse.com][3]
 Built with [Angular][1] and [Three.js][2]
