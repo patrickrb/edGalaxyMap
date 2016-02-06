@@ -26,6 +26,8 @@ angular.module('edGalaxyMap')
 					var targetCircleGeo = new THREE.CircleGeometry(50, 64);
 					var BASE_POINT_SIZE = 100;
 					var POP_SIZE_THRESHOLD = 1000000000 //population > than this will start scaling point size up
+					var c_pickingEnabled = true;
+					var c_mouseDownPos = new THREE.Vector2();
 					var targetLineMaterial = new THREE.LineBasicMaterial({
               color: '0xffffff'
           });
@@ -186,7 +188,7 @@ angular.module('edGalaxyMap')
             var $target = $(event.target);
 						mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 						mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-						if(!isLoading){
+						if(!isLoading && c_pickingEnabled){
 							var intersect = findIntersect(event);
 							if (!intersect) {
 										label.css({
@@ -216,6 +218,15 @@ angular.module('edGalaxyMap')
 						controls.keys = [ 65, 83, 68 ];
 						controls.minDistance = 5;
 						controls.addEventListener( 'change', render );
+						controls.addEventListener('end', enablePicking);
+					}
+
+					function disablePicking() {
+						c_pickingEnabled = false;
+					}
+
+					function enablePicking() {
+						c_pickingEnabled = true;
 					}
 
 					function addTargetCircle(){
@@ -264,8 +275,15 @@ angular.module('edGalaxyMap')
 						// Events
 						window.addEventListener('resize', onWindowResize, false);
 						elem[0].addEventListener('mousemove', onMouseMove, false);
-						elem[0].addEventListener('click', function (event) {
-							checkClickForIntersect(event);
+						elem[0].addEventListener('mousedown', function(event) {
+							c_mouseDownPos = new THREE.Vector2(event.pageX, event.pageY);
+							disablePicking();
+						});
+						elem[0].addEventListener('mouseup', function (event) {
+							if (new THREE.Vector2(event.pageX, event.pageY).distanceToSquared(c_mouseDownPos) < 1) {
+								checkClickForIntersect(event);
+							}
+							enablePicking();
 						});
 					}
 
@@ -325,6 +343,7 @@ angular.module('edGalaxyMap')
 					}
 
 					function flyToSystem(location){
+						disablePicking();
 										selectedSystemIcon.position.set(location);
 										stationsService.findStationsBySystemId(location.systemId);
                     var whichZ = () => {
@@ -338,6 +357,7 @@ angular.module('edGalaxyMap')
 										.easing(TWEEN.Easing.Linear.None)
 										.onComplete(function(){
 												selectedSystemIcon.visible = true;
+												enablePicking();
 										})
 										.start();
                     var tween = new TWEEN.Tween(controls.target).to({
