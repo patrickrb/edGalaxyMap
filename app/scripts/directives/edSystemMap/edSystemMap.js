@@ -179,7 +179,7 @@ angular.module('edGalaxyMap')
 
 					function getPopulationScaleForSystem(system) {
 						if (system.population) {
-							return 25 * Math.max(system.population / POP_SIZE_THRESHOLD, 1.0);
+							return BASE_POINT_SIZE * Math.max(system.population / POP_SIZE_THRESHOLD, 1.0);
 						}
 						return BASE_POINT_SIZE;
 					}
