@@ -61,6 +61,7 @@ angular.module('edGalaxyMap')
 					colorPaletteTexture = new THREE.Texture(canvas);
 					colorPaletteTexture.needsUpdate = true;
 					colorPaletteTexture.minFilter = THREE.NearestFilter;
+					colorPaletteTexture.magFilter = THREE.NearestFilter;
 					uniforms.colorPalette.value = colorPaletteTexture;
 				}
 
@@ -88,21 +89,17 @@ angular.module('edGalaxyMap')
 
 					function loadSystems() {
 						toggleSceneLoading(false);
-						var paletteCanvas = colorService.getColorPaletteImage();
-						colorPaletteTexture = new THREE.Texture(paletteCanvas);
-						colorPaletteTexture.needsUpdate = true;
-						colorPaletteTexture.minFilter = THREE.NearestFilter;
 						var texture = THREE.ImageUtils.loadTexture('models/circle.png');
 						texture.minFilter = THREE.LinearFilter;
 						uniforms = {
 
 							activeColoring: { type: "i", value: 0 },
-							colorPalette: { type: "t", value: colorPaletteTexture },
+							colorPalette: { type: "t", value: null },
 							texture: { type: "t", value: texture },
 							scale: {type: "f", value: 1.0}
 
 						};
-
+						updateColorPaletteTexture();
 						var shaderMaterial = new THREE.ShaderMaterial( {
 
 							uniforms:       uniforms,
@@ -119,7 +116,7 @@ angular.module('edGalaxyMap')
 						/*
 						* This maps the property to a color index that will be used in the shader to read the right color from a texture palette
 						* colorIndex (vec4)
-						*   [0] = map_economy , range [0,10]
+						*   [0] = map_economy 
 						*   [1] = map_allegiance
 						*   [2] = map_government
 						*   [3] = unused (star type?)
@@ -149,6 +146,7 @@ angular.module('edGalaxyMap')
 						geometry.addAttribute( 'aColorIndex', new THREE.BufferAttribute( colorIndex, 4 ) );
 						geometry.addAttribute( 'aSize', new THREE.BufferAttribute( sizes, 1 ) );
 						geometry.attributes.aSize.needsUpdate = true;
+						geometry.attributes.aColorIndex.needsUpdate = true;
 
 						particleSystem = new THREE.Points( geometry, shaderMaterial );
 
