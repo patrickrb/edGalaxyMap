@@ -4,7 +4,7 @@ angular.module('edGalaxyMap')
   .service('colorService', function ($q, colorsFactory) {
     class ColorService {
             constructor() {
-				this.colorPalette = ["#666666","#fe0000", "#ff7f00", "#ffff00", "#bfff00", "#7fff00", "#00ff15", "#009901", "#00ff80", "#01ffff", "#337eff", "#6601e5", "#e600e6"];
+				this.colorPalette = ["#666666","#fe0000", "#ff7f00", "#ffff00", "#bfff00", "#7fff00", "#00ff15", "#009901", "#00ff80", "#01ffff", "#337eff", "#0145ff", "#6601e5", "#e600e6"];
                 this.map_colorTypes = ["economy", "allegiance", "government"];
 				// The positions of these things need to match their color according to the palette in models/system_color_palette.png
 				this.map_economy = ["None", "Extraction", "Refinery", "Industrial", "UNUSED", "Agriculture", "UNUSED", "Terraforming", "UNUSED", "High Tech", "Colony", "Service", "Tourism", "Military"];
@@ -13,6 +13,10 @@ angular.module('edGalaxyMap')
 				this.activeColors = [true, true, true, true, true, true, true, true, true, true, true, true, true, true];
 				
 				this.activeColorType = "economy";
+				this.paletteCanvas = document.createElement("canvas");
+				this.paletteCanvas.width = 16;
+				this.paletteCanvas.height = 2;
+				this.paletteContext = this.paletteCanvas.getContext("2d");
             }
 
             setColoringType(colorType){
@@ -38,18 +42,14 @@ angular.module('edGalaxyMap')
 			}
 			
 			getColorPaletteImage() {
-				var canvas = document.createElement("canvas");
-				canvas.width = 16;
-				canvas.height = 2;
-				var ctx = canvas.getContext("2d");
-				ctx.clearRect(0, 0, 16, 2);
+				this.paletteContext.clearRect(0, 0, 16, 2);
 				for (var i = 0; i < this.activeColors.length; i++) {
 					if (this.activeColors[i]) {
-						ctx.fillStyle = this.colorPalette[i];
-						ctx.fillRect(i, 1, 1, 1);
+						this.paletteContext.fillStyle = this.colorPalette[i];
+						this.paletteContext.fillRect(i, 1, 1, 1);
 					}
 				}
-				return canvas;
+				return this.paletteCanvas;
 			}
         }
         return new ColorService;
