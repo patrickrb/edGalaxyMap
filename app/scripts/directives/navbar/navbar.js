@@ -8,6 +8,10 @@ angular.module('edGalaxyMap')
 							$rootScope.$broadcast('selectedSystem:update', $item);
 						}
 
+						$scope.changeColoring = function(name) {
+							$rootScope.$broadcast('systemColoring:update', name);
+						}
+
 						//wait for systems data to load, then draw systems and animate
 						$scope.$watch(function() {
 				        return systemsService.systems.length;
