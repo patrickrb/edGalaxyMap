@@ -37,8 +37,8 @@
 			varying float vActiveColorIndex;
 
 			void main() {
-				gl_FragColor = texture2D( colorPalette, vec2( vActiveColorIndex / 16.0, 0.1 ) );
-				gl_FragColor.a = texture2D( texture, gl_PointCoord ).a;
+				gl_FragColor = texture2D( colorPalette, vec2( vActiveColorIndex / 16.0, 0.0 ) );
+				gl_FragColor.a *= texture2D( texture, gl_PointCoord ).a;
 				if (gl_FragColor.w < 0.9) discard;
 			}
 		</script>
