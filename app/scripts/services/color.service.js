@@ -42,12 +42,17 @@ angular.module('edGalaxyMap')
 			}
 			
 			getColorPaletteImage() {
+				var activeNames = this.getColorNames();
 				this.paletteContext.clearRect(0, 0, 16, 2);
 				for (var i = 0; i < this.activeColors.length; i++) {
-					if (this.activeColors[i]) {
-						this.paletteContext.fillStyle = this.colorPalette[i];
+					if (activeNames[i] === "UNUSED") {
+						this.paletteContext.fillStyle = this.colorPalette[0]; //Fill this slot with the "none" color
+						this.paletteContext.fillRect(i, 1, 1, 1);
+					} else if (this.activeColors[i]) {
+						this.paletteContext.fillStyle = this.colorPalette[i]; //Fill this slot with the matching palette color
 						this.paletteContext.fillRect(i, 1, 1, 1);
 					}
+					//Leave this slot empty (alpha=0)
 				}
 				return this.paletteCanvas;
 			}
