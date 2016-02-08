@@ -1,0 +1,22 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12" style="padding: 1px 1px 1px 1px;">
+      <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">Show Systems</div>
+
+        <!-- Table -->
+        <ul>
+			<div ng-repeat="(ind, colorName) in colorNames track by $index">
+				<li ng-show="colorName !== 'UNUSED'">
+					<label>
+						<input type="checkbox" ng-model="colors[ind]" ng-change="updateColorFlags(ind)">
+						{{colorName}}
+					</label>
+				</li>
+			</div>
+		</ul>
+      </div>
+    </div>
+  </div>
+</div>

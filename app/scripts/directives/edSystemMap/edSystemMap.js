@@ -1,14 +1,8 @@
 angular.module('edGalaxyMap')
-	.directive('edSystemMap',function ($q, systemsService, $rootScope, stationsService) {
+	.directive('edSystemMap',function ($q, systemsService, $rootScope, stationsService, colorService) {
 			return {
 				restrict: 'E',
 				link: function (scope, elem, attr) {
-					var map_colorTypes = ["economy", "allegiance", "government"];
-					// The positions of these things need to match their color according to the palette in models/system_color_palette.png
-					var map_economy = ["None", "Extraction", "Refinery", "Industrial", "UNUSED", "Agriculture", "UNUSED", "Terraforming", "UNUSED", "High Tech", "Colony", "Service", "Tourism", "Military"];
-					var map_government = ["None", "Confederacy", "Prison Colony", "Anarchy", "Colony", "Democracy", "Imperial", "Corporate", "Communism", "Feudal", "Dictatorship", "Theocracy", "Cooperative", "Patronage"];
-					var map_allegiance = ["None", "Federation", "UNUSED", "Independent", "UNUSED", "UNUSED", "Alliance", "UNUSED", "UNUSED", "Empire", "UNUSED", "UNUSED", "UNUSED", "UNUSED"];
-
 					window.scene;
 					var camera;
 					var controls;
@@ -35,6 +29,7 @@ angular.module('edGalaxyMap')
 					var c_pickingEnabled = true;
 					var c_mouseDownPos = new THREE.Vector2();
 					var targetLineMaterial = new THREE.LineBasicMaterial({color: '0xffffff'});
+					var colorPaletteTexture;
 					var label = $("#pointer");
 					var INTERSECTED;
 					//load galaxy data
@@ -50,13 +45,24 @@ angular.module('edGalaxyMap')
 				});
 
 				scope.$on('systemColoring:update', function(event, newColorKey) {
-					var colorIndex = map_colorTypes.indexOf(newColorKey);
+					var colorIndex = colorService.map_colorTypes.indexOf(newColorKey);
 					if (colorIndex < 0) {
 						console.error("Unknown system coloring type: "+newColorKey);
 						colorIndex = 0;
 					}
 					uniforms.activeColoring.value = colorIndex;
+					updateColorPaletteTexture();
 				});
+
+				scope.$on('systemColoring:updateActives', updateColorPaletteTexture);
+
+				function updateColorPaletteTexture() {
+					var canvas = colorService.getColorPaletteImage();
+					colorPaletteTexture = new THREE.Texture(canvas);
+					colorPaletteTexture.needsUpdate = true;
+					colorPaletteTexture.minFilter = THREE.NearestFilter;
+					uniforms.colorPalette.value = colorPaletteTexture;
+				}
 
 					//wait for systems data to load, then draw systems and animate
 					scope.$watch(function() {
@@ -82,14 +88,16 @@ angular.module('edGalaxyMap')
 
 					function loadSystems() {
 						toggleSceneLoading(false);
-						var paletteTexture = THREE.ImageUtils.loadTexture('models/system_color_palette.png');
-						paletteTexture.minFilter = THREE.NearestFilter;
+						var paletteCanvas = colorService.getColorPaletteImage();
+						colorPaletteTexture = new THREE.Texture(paletteCanvas);
+						colorPaletteTexture.needsUpdate = true;
+						colorPaletteTexture.minFilter = THREE.NearestFilter;
 						var texture = THREE.ImageUtils.loadTexture('models/circle.png');
 						texture.minFilter = THREE.LinearFilter;
 						uniforms = {
 
-							activeColoring: { type: "i", value: 2 },
-							colorPalette: { type: "t", value: paletteTexture },
+							activeColoring: { type: "i", value: 0 },
+							colorPalette: { type: "t", value: colorPaletteTexture },
 							texture: { type: "t", value: texture },
 							scale: {type: "f", value: 1.0}
 
@@ -127,9 +135,9 @@ angular.module('edGalaxyMap')
 							positions[ i3 + 1 ] = system.y;
 							positions[ i3 + 2 ] = system.z;
 
-							colorIndex[ i*4 + 0 ] = map_economy.indexOf(systemsService.systems[i].primary_economy);
-							colorIndex[ i*4 + 1 ] = map_allegiance.indexOf(systemsService.systems[i].allegiance);
-							colorIndex[ i*4 + 2 ] = map_government.indexOf(systemsService.systems[i].government);
+							colorIndex[ i*4 + 0 ] = colorService.map_economy.indexOf(systemsService.systems[i].primary_economy);
+							colorIndex[ i*4 + 1 ] = colorService.map_allegiance.indexOf(systemsService.systems[i].allegiance);
+							colorIndex[ i*4 + 2 ] = colorService.map_government.indexOf(systemsService.systems[i].government);
 							colorIndex[ i*4 + 3 ] = 0;
 
 							sizes[ i ] = getPopulationScaleForSystem(system);
