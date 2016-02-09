@@ -14,13 +14,15 @@ angular.module('edGalaxyMap')
 			});
 
 			$scope.updateColorFlags = function(index) {
-				colorService.setColorActive(index, $scope.colors[index]);
+				colorService.setColorActive(index, $scope.activeColors[index]);
 				$rootScope.$broadcast("systemColoring:updateActives");
 			};
 
 			$scope.colorNames = colorService.getColorNames();
 			$scope.activeColors = colorService.getActiveColors();
-			$scope.colors = $scope.activeColors;
+
+			$scope.colors = colorService.colorPalette;
+
 		}
 	}
 });
