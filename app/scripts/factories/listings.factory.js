@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('edGalaxyMap')
   .factory('listingsFactory', function ($http) {
       class ListingsFactory {
@@ -13,5 +15,5 @@ angular.module('edGalaxyMap')
                     .then(x => { return x.data;});
             }
         }
-        return new ListingsFactory();
+        return new ListingsFactory;
   });

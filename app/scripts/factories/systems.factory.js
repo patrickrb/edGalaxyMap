@@ -10,5 +10,5 @@ angular.module('edGalaxyMap')
                     });
             }
         }
-        return new SystemsFactory();
+        return new SystemsFactory;
   });

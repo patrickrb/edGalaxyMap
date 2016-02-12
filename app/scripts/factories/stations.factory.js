@@ -15,5 +15,5 @@ angular.module('edGalaxyMap')
                     .then(x => { return x.data;});
             }
         }
-        return new StationsFactory();
+        return new StationsFactory;
   });

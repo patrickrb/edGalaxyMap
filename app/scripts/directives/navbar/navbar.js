@@ -1,11 +1,16 @@
 angular.module('edGalaxyMap')
-	.directive('navbar',function ($rootScope, $q, $uibModal, systemsService, userService, $cookieStore) {
+	.directive('navbar',function ($rootScope, $q, $uibModal, systemsService, userService, colorService, $cookieStore) {
 			return {
 				restrict: 'E',
 				templateUrl: 'scripts/directives/navbar/navbar.html',
 				link: function ($scope, elem, attr) {
 						$scope.changeSystem = function($item, $model, $label, $event){
 							$rootScope.$broadcast('selectedSystem:update', $item);
+						}
+
+						$scope.changeColoring = function(name) {
+							colorService.setColoringType(name);
+							$rootScope.$broadcast('systemColoring:update', name);
 						}
 
 						//wait for systems data to load, then draw systems and animate
