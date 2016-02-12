@@ -40,6 +40,13 @@ angular.module('edGalaxyMap')
 			getActiveColors() {
 				return this.activeColors;
 			}
+
+			isSystemActive(system) {
+				var key = this.activeColorType;
+				if (key == "economy") key = "primary_economy";
+				var value = system[key] || "None";
+				return this.activeColors[this.getColorNames().indexOf(value)];
+			}
 			
 			getColorPaletteImage() {
 				var activeNames = this.getColorNames();

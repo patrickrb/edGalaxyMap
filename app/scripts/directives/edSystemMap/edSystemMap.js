@@ -375,6 +375,8 @@ angular.module('edGalaxyMap')
 									}
 									else{
 										var location = systemsService.systems[intersect.index];
+										if (!colorService.isSystemActive(location))
+											return false;
 										addLabel(event, location.name);
 										setTargetPosition(location);
 										return intersect;
