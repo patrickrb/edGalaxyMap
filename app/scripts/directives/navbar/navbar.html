@@ -44,7 +44,9 @@
                 </ul>
               </li>
                 <li><a>Search</a></li>
-                <li id="searchSystemListItem"><input type="text" id="searchSystemsInput" class="form-control" ng-model="selectedSystem" typeahead-on-select="changeSystem($item, $model, $label, $event)" uib-typeahead="system as system.name for system in systems | filter:$viewValue | limitTo:8" class="form-control" typeahead-show-hint="true" typeahead-min-length="2">
+                <li id="searchSystemListItem">
+                  <input type="text" id="searchSystemsInput" class="form-control" ng-model="selectedSystem" typeahead-on-select="changeSystem($item, $model, $label, $event)" uib-typeahead="system as system.name for system in systems | filter:$viewValue | limitTo:8" class="form-control" typeahead-show-hint="true" typeahead-wait-ms="300" typeahead-min-length="1">
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right"  ng-if="isLoggedIn">
                 <li><img gravatar-src-once="user.email"></li>
