@@ -1,37 +1,32 @@
-[![Gitter](https://badges.gitter.im/patrickrb/edGalaxyMap.svg)](https://gitter.im/patrickrb/edGalaxyMap?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-# Elite Dangerous Galaxy Map
-##Preview: [http://elitedangerousuniverse.com][3]
-Built with [Angular][1] and [Three.js][2]
+# ed-galaxy2
 
-## Quick Install
-You'll need to install grunt and bower on your host.
+This project was generated with the [Angular Full-Stack Generator](https://github.com/DaftMonk/generator-angular-fullstack) version 3.0.0-rc8.
 
-    $ npm install -g grunt-cli bower
+## Getting Started
 
-Next, install npm packages and bower dependencies
+### Prerequisites
 
-    $ npm install
-    $ bower install
+- [Git](https://git-scm.com/)
+- [Node.js and NPM](nodejs.org) >= v0.12.0
+- [Bower](bower.io) (`npm install --global bower`)
+- [Ruby](https://www.ruby-lang.org) and then `gem install sass`
+- [Grunt](http://gruntjs.com/) (`npm install --global grunt-cli`)
+- [MongoDB](https://www.mongodb.org/) - Keep a running daemon with `mongod`
 
-Launch your application in development mode for livereload
+### Developing
 
-    $ grunt serve
+1. Run `npm install` to install server dependencies.
 
-For production
+2. Run `bower install` to install front-end dependencies.
 
-    $ node server/edGalaxy.js
+3. Run `mongod` in a separate shell to keep an instance of the MongoDB Daemon running
 
+4. Run `grunt serve` to start the development server. It should automatically open the client in your browser when ready.
 
+## Build & development
 
-##Contributors
+Run `grunt build` for building and `grunt serve` for preview.
 
-[patrickrb][4]
+## Testing
 
-[csvurt][5]
-
-
-[1]: https://angularjs.org/
-[2]: http://threejs.org/
-[3]: http://elitedangerousuniverse.com
-[4]: https://github.com/patrickrb
-[5]: https://github.com/csvurt
+Running `npm test` will run the unit tests with karma.

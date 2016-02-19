@@ -1,13 +1,19 @@
 {
-  "name": "temp",
+  "name": "ed-galaxy2",
   "version": "0.0.0",
   "dependencies": {
-    "angular": "~1.4.8",
+    "angular": "~1.4.0",
+    "json3": "~3.3.1",
+    "es5-shim": "~3.0.1",
+    "angular-resource": "~1.4.0",
+    "angular-cookies": "~1.4.0",
+    "angular-sanitize": "~1.4.0",
+    "font-awesome": ">=4.1.0",
+    "lodash": "~2.4.1",
+    "angular-socket-io": "~0.7.0",
+    "angular-ui-router": "~0.2.15",
+    "angular-validation-match": "~1.5.2",
     "three.js": "threejs#*",
-    "angular-cookies": "~1.4.9",
-    "angular-mocks": "~1.4.8",
-    "angular-resource": "~1.4.8",
-    "angular-sanitize": "~1.4.8",
     "angular-scenario": "~1.4.8",
     "angular-route": "~1.4.8",
     "angular-material": "^1.0.0",
@@ -19,7 +25,7 @@
     "angular-gravatar": "~0.4.1",
     "font-awesome": "fontawesome#~4.5.0"
   },
-  "resolutions": {
-    "angular": "1.5.0"
+  "devDependencies": {
+    "angular-mocks": "~1.4.0"
   }
 }
