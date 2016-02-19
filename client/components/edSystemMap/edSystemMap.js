@@ -89,7 +89,7 @@ angular.module('edGalaxy2App')
 
 					function loadSystems() {
 						toggleSceneLoading(false);
-						var texture = THREE.ImageUtils.loadTexture('models/circle.png');
+						var texture = THREE.ImageUtils.loadTexture('assets/textures/circle.png');
 						texture.minFilter = THREE.LinearFilter;
 						uniforms = {
 
@@ -116,7 +116,7 @@ angular.module('edGalaxy2App')
 						/*
 						* This maps the property to a color index that will be used in the shader to read the right color from a texture palette
 						* colorIndex (vec4)
-						*   [0] = map_economy 
+						*   [0] = map_economy
 						*   [1] = map_allegiance
 						*   [2] = map_government
 						*   [3] = unused (star type?)
