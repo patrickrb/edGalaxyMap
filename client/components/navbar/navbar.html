@@ -58,8 +58,8 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right" ng-if="!isLoggedIn">
-              <li ng-click="openRegisterModal()"><a href="">Register</a></li>
-              <li ng-click="openLoginModal()"><a href="">Login</a></li>
+              <li><a ui-sref="signup">Register</a></li>
+              <li><a ui-sref="login">Login</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
