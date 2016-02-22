@@ -77,7 +77,7 @@
 				float cameraDist = max(pow(0.03, distance(vCameraWorldPos, vObjWorldCenter) * 0.005), 0.005);
 
 				// Used to fade the opacity of the grid lines as they get further from the center
-				float invFragDistance = pow(0.4, length(vPosObjSpace) * 0.09 * cameraDist);
+				float invFragDistance = pow(0.4, length(vPosObjSpace) * 0.12 * cameraDist);
 
 				// Generates a grid using screen space derivatives, uPanDelta is added to give the grid some movement when the camera is panned
 				vec2 coord = (vPosObjSpace.xy + uPanDelta.xz) * cameraDist;
