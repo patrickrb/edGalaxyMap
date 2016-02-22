@@ -439,6 +439,9 @@ angular.module('edGalaxyMap')
 					function animate(time) {
 						if(!isLoading){
 							controls.update();
+							var distToCamera = selectedSystemIcon.position.distanceTo(camera.position) * 0.1;
+							var scaleFactor = Math.max(Math.min(distToCamera, 5.0), 1.0);
+							selectedSystemIcon.scale.set(0.33 * scaleFactor, 0.66 * scaleFactor, 0.33 * scaleFactor);
 						}
 						requestAnimationFrame(animate);
 						TWEEN.update(time);
