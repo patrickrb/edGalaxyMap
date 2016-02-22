@@ -76,7 +76,7 @@ module.exports = function(grunt) {
             },
             overrides:{
               'three.js':{
-                  main: ["./build/three.min.js", "./examples/js/controls/TrackballControls.js", "./examples/js/renderers/Projector.js"]
+                  main: ["./build/three.min.js", "./examples/js/controls/OrbitControls.js", "./examples/js/renderers/Projector.js"]
               },
               'bootstrap':{
                   main: ["dist/js/bootstrap.min.js", "dist/css/bootstrap.min.css"]

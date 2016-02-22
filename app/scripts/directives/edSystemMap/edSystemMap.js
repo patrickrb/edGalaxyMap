@@ -3,11 +3,8 @@ angular.module('edGalaxyMap')
 			return {
 				restrict: 'E',
 				link: function (scope, elem, attr) {
-					window.scene;
 					var camera;
 					var controls;
-					var colors = [];
-					var particles = [];
 					var uniforms;
 					var renderer;
 					var loadingTextMesh;
@@ -16,22 +13,18 @@ angular.module('edGalaxyMap')
 					var particleSystem;
 					var raycaster;
 					var geometry;
-					var backgroundScene;
-					var backgroundCamera;
 					var mouse = new THREE.Vector2(0, 0);
-					var selectedNodes = [];
-					var systemNodeData = [];
 					var selectedSystemIcon;
 					var targetCircle = new THREE.Object3D();
 					var targetCircleGeo = new THREE.CircleGeometry(50, 64);
 					var BASE_POINT_SIZE = 100;
-					var POP_SIZE_THRESHOLD = 1000000000 //population > than this will start scaling point size up
+					var POP_SIZE_THRESHOLD = 1000000000; //population > than this will start scaling point size up
 					var c_pickingEnabled = true;
 					var c_mouseDownPos = new THREE.Vector2();
 					var targetLineMaterial = new THREE.LineBasicMaterial({color: '0xffffff'});
 					var colorPaletteTexture;
 					var label = $("#pointer");
-					var INTERSECTED;
+
 					//load galaxy data
 					systemsService.init();
 					//init the window.scene
@@ -184,16 +177,13 @@ angular.module('edGalaxyMap')
 					}
 
 					function addControls(){
-						controls = new THREE.TrackballControls( camera, elem[0] );
-						controls.rotateSpeed = 10.0;
+						controls = new THREE.OrbitControls( camera, elem[0].childNodes[0] );
+						controls.rotateSpeed = 0.3;
 						controls.zoomSpeed = 2.2;
 						controls.panSpeed = 2;
 
-						controls.noZoom = false;
-						controls.noPan = true;
-
-						controls.staticMoving = true;
-						controls.dynamicDampingFactor = 0.3;
+						controls.enableDamping = true;
+						controls.dampingFactor = 0.3;
 
 						controls.keys = [ 65, 83, 68 ];
 						controls.minDistance = 5;
