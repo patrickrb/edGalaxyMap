@@ -43,6 +43,41 @@
 			}
 		</script>
 
+		<script type="x-shader/x-vertex" id="v-gridshader">
+			varying vec3 vPosition;
+			varying vec3 vCameraPos;
+
+			void main() {
+				vCameraPos = cameraPosition;
+				float cameraDist = length(cameraPosition);
+				vec3 pos = position * log(cameraDist);
+				vec4 mvPosition = modelViewMatrix * vec4( pos, 1.0 );
+				vPosition = (modelMatrix * vec4(pos, 1.0)).xyz;
+
+				gl_Position = projectionMatrix * mvPosition;
+			}
+		</script>
+
+		<script type="x-shader/x-fragment" id="f-gridshader">
+			#extension GL_OES_standard_derivatives : enable
+
+			varying vec3 vPosition;
+			varying vec3 vCameraPos;
+
+			void main() {
+				float cameraDist =  max(pow(0.1, length(vCameraPos * 0.005)), 0.02);
+				float dist = 1.0 - log(length(vPosition * cameraDist * 0.1));
+
+				vec2 coord = vPosition.xy * cameraDist;
+				vec2 grid = abs(fract(coord - 0.5) - 0.5) / fwidth(coord);
+				float line = min(grid.x, grid.y);
+				float a = 1.0 - min(line, 1.0);
+				a *= dist * 0.4;
+
+				gl_FragColor = vec4(0.4, 0.4, 0.4, a);
+			}
+		</script>
+
 
 
 

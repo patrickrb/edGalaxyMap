@@ -5,6 +5,7 @@ angular.module('edGalaxyMap')
 				link: function (scope, elem, attr) {
 					var camera;
 					var controls;
+					var cameraBoundObjects = {};
 					var uniforms;
 					var renderer;
 					var loadingTextMesh;
@@ -174,6 +175,46 @@ angular.module('edGalaxyMap')
 								$target.focus();
 							}
 						}
+
+						if (window.isPanning) {
+
+						}
+					}
+
+					function addCameraBoundGeometry() {
+						cameraBoundObjects.gridPlane = {
+							geometry : (function() {
+								var texture = THREE.ImageUtils.loadTexture('models/grid.png');
+								texture.minFilter = THREE.LinearFilter;
+								var geometry = new THREE.PlaneGeometry(1000,1000);
+								var shaderMaterial = new THREE.ShaderMaterial( {
+									uniforms:		{ texture : texture },
+									vertexShader:   document.getElementById( 'v-gridshader' ).textContent,
+									fragmentShader: document.getElementById( 'f-gridshader' ).textContent,
+									depthTest:      true,
+									depthWrite:     true,
+									transparent:    true,
+									side: 			THREE.DoubleSide,
+									shading:        THREE.FlatShading
+								});
+								return new THREE.Mesh(geometry, shaderMaterial);
+							})(),
+							updatePosition : function(pos) {
+								var axis = pos.sub(this.geometry.position);
+								var dist = axis.length() * 0.5;
+								axis.normalize();
+								this.geometry.translateOnAxis(axis, dist);
+							}
+						};
+
+						window.scene.add(cameraBoundObjects.gridPlane.geometry);
+
+
+						cameraBoundObjects.updateCameraPos = function(pos) {
+							for (var i in this) {
+								this[i].updatePosition && this[i].updatePosition(pos.clone());
+							}
+						}
 					}
 
 					function addControls(){
@@ -233,6 +274,7 @@ angular.module('edGalaxyMap')
 
 						addTargetCircle();
 						addSelectedSystemIcon();
+						addCameraBoundGeometry();
 
 						raycaster = new THREE.Raycaster();
 						raycaster.params.PointCloud.threshold = 0.5;
