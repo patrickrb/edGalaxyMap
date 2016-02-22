@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('edGalaxy2App', [
+angular.module('edGalaxyMap', [
   'ngCookies',
   'ngResource',
   'ngSanitize',

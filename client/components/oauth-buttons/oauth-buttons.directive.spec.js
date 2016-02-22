@@ -3,7 +3,7 @@
 describe('Directive: oauthButtons', function() {
 
   // load the directive's module and view
-  beforeEach(module('edGalaxy2App'));
+  beforeEach(module('edGalaxyMap'));
   beforeEach(module('components/oauth-buttons/oauth-buttons.html'));
 
   var element, parentScope, elementScope;

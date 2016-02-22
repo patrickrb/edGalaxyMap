@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('edGalaxy2App')
+angular.module('edGalaxyMap')
   .factory('Auth', function Auth($http, User, $cookies, $q) {
     /**
      * Return a callback or noop function

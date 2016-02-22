@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('edGalaxy2App')
+angular.module('edGalaxyMap')
   .factory('userFactory', function ($http, $q, $cookieStore) {
       class userFactory {
             login(user, callback){

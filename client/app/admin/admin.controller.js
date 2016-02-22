@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('edGalaxy2App')
+angular.module('edGalaxyMap')
   .controller('AdminCtrl', function($scope, $http, Auth, User) {
 
     // Use the User $resource to fetch all users

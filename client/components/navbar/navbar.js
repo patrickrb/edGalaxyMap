@@ -1,4 +1,4 @@
-angular.module('edGalaxy2App')
+angular.module('edGalaxyMap')
 	.directive('navbar',function ($rootScope, $q, $uibModal, systemsService, userService, colorService, $cookieStore, Auth) {
 			return {
 				restrict: 'E',

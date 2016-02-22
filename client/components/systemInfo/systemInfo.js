@@ -1,4 +1,4 @@
-angular.module('edGalaxy2App')
+angular.module('edGalaxyMap')
 	.directive('systemInfo',function ($q, systemsService, stationsService, $uibModal) {
 			return {
 				restrict: 'E',
@@ -24,7 +24,7 @@ angular.module('edGalaxy2App')
 					 $scope.open = function (station, selectedSystem) {
 						var modalInstance = $uibModal.open({
 							animation: $scope.animationsEnabled,
-							templateUrl: '/scripts/directives/stationModal/stationModal.html',
+							templateUrl: 'components/stationModal/stationModal.html',
 							controller: 'StationModalCtrl',
 							size: 'lg',
 							resolve: {

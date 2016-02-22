@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('edGalaxy2App')
+angular.module('edGalaxyMap')
   .controller('SettingsCtrl', function($scope, User, Auth) {
     $scope.errors = {};
 

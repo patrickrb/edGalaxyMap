@@ -297,7 +297,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%= yeoman.client %>/assets/images',
-          src: '{,*/}*.{png,jpg,jpeg,gif,svg}',
+          src: '*/*.{png,jpg,jpeg,gif,svg}',
           dest: '<%= yeoman.dist %>/client/assets/images'
         }]
       }
@@ -320,7 +320,7 @@ module.exports = function (grunt) {
     ngtemplates: {
       options: {
         // This should be the name of your apps angular module
-        module: 'edGalaxy2App',
+        module: 'edGalaxyMap',
         htmlmin: {
           collapseBooleanAttributes: true,
           collapseWhitespace: true,
@@ -363,8 +363,7 @@ module.exports = function (grunt) {
             '*.{ico,png,txt}',
             '.htaccess',
             'bower_components/**/*',
-            'assets/images/{,*/}*.{webp}',
-            'assets/fonts/**/*',
+            'assets/**/*',
             'index.html'
           ]
         }, {

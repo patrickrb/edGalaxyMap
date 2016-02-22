@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('edGalaxy2App')
+angular.module('edGalaxyMap')
   .service('userService', function ($q, userFactory, $cookieStore) {
     class LoginService {
             constructor() {

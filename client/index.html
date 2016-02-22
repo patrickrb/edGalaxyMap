@@ -25,7 +25,7 @@
       <!-- endinjector -->
     <!-- endbuild -->
   </head>
-  <body ng-app="edGalaxy2App" style="margin:0px; overflow:hidden;">
+  <body ng-app="edGalaxyMap" style="margin:0px; overflow:hidden;">
     <!--[if lt IE 7]>
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -59,9 +59,6 @@
       <script src="bower_components/angular-socket-io/socket.js"></script>
       <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
       <script src="bower_components/angular-validation-match/dist/angular-validation-match.min.js"></script>
-      <script src="bower_components/three.js/build/three.min.js"></script>
-      <script src="bower_components/three.js/examples/js/controls/TrackballControls.js"></script>
-      <script src="bower_components/three.js/examples/js/renderers/Projector.js"></script>
       <script src="bower_components/angular-scenario/angular-scenario.js"></script>
       <script src="bower_components/angular-route/angular-route.js"></script>
       <script src="bower_components/angular-animate/angular-animate.js"></script>
@@ -72,6 +69,9 @@
       <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
       <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
       <script src="bower_components/angular-gravatar/build/angular-gravatar.js"></script>
+      <script src="bower_components/three.js/build/three.min.js"></script>
+      <script src="bower_components/three.js/examples/js/controls/TrackballControls.js"></script>
+      <script src="bower_components/three.js/examples/js/renderers/Projector.js"></script>
       <!-- endbower -->
       <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
@@ -97,12 +97,10 @@
       <script src="components/factories/user.factory.js"></script>
       <script src="components/footer/footer.js"></script>
       <script src="components/loadingSpinner/loadingSpinner.js"></script>
-      <script src="components/loginModal/loginModal.js"></script>
       <script src="components/mongoose-error/mongoose-error.directive.js"></script>
       <script src="components/navbar/navbar.js"></script>
       <script src="components/oauth-buttons/oauth-buttons.controller.js"></script>
       <script src="components/oauth-buttons/oauth-buttons.directive.js"></script>
-      <script src="components/registerModal/registerModal.js"></script>
       <script src="components/services/color.service.js"></script>
       <script src="components/services/listings.service.js"></script>
       <script src="components/services/stations.service.js"></script>

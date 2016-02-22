@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('edGalaxy2App')
+angular.module('edGalaxyMap')
   .factory('stationsFactory', function ($http) {
       class StationsFactory {
             find() {

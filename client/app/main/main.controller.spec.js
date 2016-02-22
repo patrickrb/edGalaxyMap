@@ -3,7 +3,7 @@
 describe('Controller: MainController', function() {
 
   // load the controller's module
-  beforeEach(module('edGalaxy2App'));
+  beforeEach(module('edGalaxyMap'));
   beforeEach(module('stateMock'));
   beforeEach(module('socketMock'));
 

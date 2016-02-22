@@ -3,7 +3,7 @@
 /**
  * Removes server error when user updates input
  */
-angular.module('edGalaxy2App')
+angular.module('edGalaxyMap')
   .directive('mongooseError', function () {
     return {
       restrict: 'A',

@@ -3,7 +3,7 @@
 describe('Controller: OauthButtonsCtrl', function() {
 
   // load the controller's module
-  beforeEach(module('edGalaxy2App'));
+  beforeEach(module('edGalaxyMap'));
 
   var OauthButtonsCtrl, $window;
 

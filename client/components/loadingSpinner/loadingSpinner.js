@@ -1,4 +1,4 @@
-angular.module('edGalaxy2App')
+angular.module('edGalaxyMap')
 	.directive('loadingSpinner',function ($rootScope, $q, systemsService) {
 			return {
 				restrict: 'E',

@@ -27,7 +27,7 @@ function MainController($scope, $http, socket) {
   });
 }
 
-angular.module('edGalaxy2App')
+angular.module('edGalaxyMap')
   .controller('MainController', MainController);
 
 })();

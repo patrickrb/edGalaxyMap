@@ -1,4 +1,4 @@
-angular.module('edGalaxy2App')
+angular.module('edGalaxyMap')
 	.directive('edSystemMap',function ($q, systemsService, $rootScope, stationsService, colorService) {
 			return {
 				restrict: 'E',
@@ -219,7 +219,7 @@ angular.module('edGalaxy2App')
 					}
 
 					function addSelectedSystemIcon(){
-						var selectedSystemIconTexture = THREE.ImageUtils.loadTexture('images/icons/map/Marker-galaxy-map-green.png');
+						var selectedSystemIconTexture = THREE.ImageUtils.loadTexture('assets/textures/Marker-galaxy-map-green.png');
 						var selectedSystemIconMaterial = new THREE.SpriteMaterial({
 							map: selectedSystemIconTexture,
 							color: 0xffffff,

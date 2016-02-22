@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('edGalaxy2App')
+angular.module('edGalaxyMap')
   .factory('colorsFactory', function ($http) {
       class ColorsFactory {
            

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('edGalaxy2App')
+angular.module('edGalaxyMap')
   .controller('LoginCtrl', function($scope, Auth, $state) {
     $scope.user = {};
     $scope.errors = {};

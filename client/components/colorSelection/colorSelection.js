@@ -1,4 +1,4 @@
-angular.module('edGalaxy2App')
+angular.module('edGalaxyMap')
 .directive('colorSelection', function ($rootScope, $q, colorService, $uibModal) {
 	return {
 		restrict : 'E',

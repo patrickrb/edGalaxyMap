@@ -1,4 +1,4 @@
-angular.module('edGalaxy2App')
+angular.module('edGalaxyMap')
   .controller('StationModalCtrl', function ($scope, $uibModalInstance, station, system, listingsService) {
     listingsService.findListingsByStationId(station.id);
 
