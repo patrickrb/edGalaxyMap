@@ -368,8 +368,8 @@ angular.module('edGalaxyMap')
                         return camera.position.z > 0 ? 5 : -5;
                     };
                     var tween = new TWEEN.Tween(camera.position).to({
-                        x: location.x + 5,
-                        y: location.y + 5,
+                        x: location.x + 5.5,
+                        y: location.y + 5.5,
                         z: location.z + whichZ()
                     })
 										.easing(TWEEN.Easing.Linear.None)
