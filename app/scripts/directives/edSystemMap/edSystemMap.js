@@ -184,11 +184,9 @@ angular.module('edGalaxyMap')
 					function addCameraBoundGeometry() {
 						cameraBoundObjects.gridPlane = {
 							geometry : (function() {
-								var texture = THREE.ImageUtils.loadTexture('models/grid.png');
-								texture.minFilter = THREE.LinearFilter;
 								var geometry = new THREE.PlaneGeometry(10000,10000);
 								var shaderMaterial = new THREE.ShaderMaterial( {
-									uniforms:		{ texture : texture },
+									uniforms:		{ uPanDelta : {type: "v3", value: new THREE.Vector3()} },
 									vertexShader:   document.getElementById( 'v-gridshader' ).textContent,
 									fragmentShader: document.getElementById( 'f-gridshader' ).textContent,
 									depthTest:      true,
@@ -199,9 +197,19 @@ angular.module('edGalaxyMap')
 								});
 								return new THREE.Mesh(geometry, shaderMaterial);
 							})(),
-							updatePosition : function(pos) {
-								this.geometry.position.set(pos.x, pos.y, pos.z);
-							}
+							updatePosition : (function() {
+								var tmp = new THREE.Vector3();
+								var delta = new THREE.Vector3();
+								return function(pos) {
+									// Add the panning delta between this frame and the last, then fade it so it reduces back to 0 eventually
+									tmp.sub(pos);
+									delta.add(tmp);
+									delta.multiplyScalar(0.85);
+									this.geometry.position.copy(pos); // Move center point of grid plane to camera's target point
+									this.geometry.material.uniforms.uPanDelta.value.copy(delta);
+									tmp.copy(pos);
+								}
+							})()
 						};
 
 						window.scene.add(cameraBoundObjects.gridPlane.geometry);
@@ -226,9 +234,6 @@ angular.module('edGalaxyMap')
 
 						controls.keys = [ 65, 83, 68 ];
 						controls.minDistance = 5;
-						controls.addEventListener( 'change', function() {
-							render();
-						} );
 						controls.addEventListener('end', enablePicking);
 					}
 
