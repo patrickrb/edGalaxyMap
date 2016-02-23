@@ -43,6 +43,55 @@
 			}
 		</script>
 
+		<script type="x-shader/x-vertex" id="v-gridshader">
+			varying vec3 vPosObjSpace;
+			varying vec3 vPosWorldSpace;
+			varying vec3 vCameraWorldPos;
+			varying vec3 vObjWorldCenter;
+
+			void main() {
+				vCameraWorldPos = cameraPosition;
+				vPosObjSpace = position;
+				vPosWorldSpace = (modelMatrix * vec4(position, 1.0)).xyz;
+
+				//Grid plane is assumed to be at 0,0,0 originally, so the translation part of the model matrix is its current center point in world space
+				vObjWorldCenter = vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]); 
+
+				vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+				gl_Position = projectionMatrix * mvPosition;
+			}
+		</script>
+
+		<script type="x-shader/x-fragment" id="f-gridshader">
+			#extension GL_OES_standard_derivatives : enable
+
+			varying vec3 vPosObjSpace;
+			varying vec3 vPosWorldSpace;
+			varying vec3 vCameraWorldPos;
+			varying vec3 vObjWorldCenter;
+
+			uniform vec3 uPanDelta;
+
+			void main() {
+				// This is used to scale the grid size as the camera zooms out
+				float cameraDist = max(pow(0.03, distance(vCameraWorldPos, vObjWorldCenter) * 0.005), 0.005);
+
+				// Used to fade the opacity of the grid lines as they get further from the center
+				float invFragDistance = pow(0.4, length(vPosObjSpace) * 0.12 * cameraDist);
+
+				// Generates a grid using screen space derivatives, uPanDelta is added to give the grid some movement when the camera is panned
+				vec2 coord = (vPosObjSpace.xy + uPanDelta.xz) * cameraDist;
+				vec2 grid = abs(fract(coord - 0.5) - 0.5) / fwidth(coord);
+				float line = min(grid.x, grid.y);
+				float a = 1.0 - min(line, 1.0);
+				a *= invFragDistance;
+
+				if (a < 0.01) discard;
+
+				gl_FragColor = vec4(0.4, 0.4, 0.4, a);
+			}
+		</script>
+
 
 
 
