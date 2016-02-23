@@ -31,3 +31,17 @@ Run `grunt build` for building and `grunt serve` for preview.
 ## Testing
 
 Running `npm test` will run the unit tests with karma.
+
+
+##Contributors
+
+[patrickrb][4]
+
+[csvurt][5]
+
+
+[1]: https://angularjs.org/
+[2]: http://threejs.org/
+[3]: http://elitedangerousuniverse.com
+[4]: https://github.com/patrickrb
+[5]: https://github.com/csvurt
