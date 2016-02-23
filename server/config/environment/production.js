@@ -19,6 +19,6 @@ module.exports = {
             process.env.MONGOHQ_URL ||
             process.env.OPENSHIFT_MONGODB_DB_URL +
             process.env.OPENSHIFT_APP_NAME ||
-            'mongodb://localhost/edgalaxy2-dev'
+            'mongodb://localhost/edgalaxy2'
   }
 };
