@@ -1,5 +1,5 @@
 angular.module('edGalaxyMap')
-	.directive('systemInfo',function ($q, systemsService, stationsService, $uibModal) {
+	.directive('systemInfo',function ($q, systemsService, $rootScope, stationsService, $uibModal) {
 			return {
 				restrict: 'E',
 				templateUrl: 'components/systemInfo/systemInfo.html',
@@ -20,6 +20,9 @@ angular.module('edGalaxyMap')
 							 }
 					 });
 
+					 $scope.hideSystemInfo = function(){
+						 	$rootScope.systemInfoHidden = true;
+					 }
 
 					 $scope.open = function (station, selectedSystem) {
 						var modalInstance = $uibModal.open({
