@@ -3,11 +3,9 @@ angular.module('edGalaxyMap')
 			return {
 				restrict: 'E',
 				link: function (scope, elem, attr) {
-					window.scene;
 					var camera;
 					var controls;
-					var colors = [];
-					var particles = [];
+					var cameraBoundObjects = {};
 					var uniforms;
 					var renderer;
 					var loadingTextMesh;
@@ -16,22 +14,18 @@ angular.module('edGalaxyMap')
 					var particleSystem;
 					var raycaster;
 					var geometry;
-					var backgroundScene;
-					var backgroundCamera;
 					var mouse = new THREE.Vector2(0, 0);
-					var selectedNodes = [];
-					var systemNodeData = [];
 					var selectedSystemIcon;
 					var targetCircle = new THREE.Object3D();
 					var targetCircleGeo = new THREE.CircleGeometry(50, 64);
 					var BASE_POINT_SIZE = 100;
-					var POP_SIZE_THRESHOLD = 1000000000 //population > than this will start scaling point size up
+					var POP_SIZE_THRESHOLD = 1000000000; //population > than this will start scaling point size up
 					var c_pickingEnabled = true;
 					var c_mouseDownPos = new THREE.Vector2();
 					var targetLineMaterial = new THREE.LineBasicMaterial({color: '0xffffff'});
 					var colorPaletteTexture;
 					var label = $("#pointer");
-					var INTERSECTED;
+
 					//load galaxy data
 					systemsService.init();
 					//init the window.scene
@@ -181,23 +175,65 @@ angular.module('edGalaxyMap')
 								$target.focus();
 							}
 						}
+
+						if (window.isPanning) {
+
+						}
+					}
+
+					function addCameraBoundGeometry() {
+						cameraBoundObjects.gridPlane = {
+							geometry : (function() {
+								var geometry = new THREE.PlaneGeometry(10000,10000);
+								var shaderMaterial = new THREE.ShaderMaterial( {
+									uniforms:		{ uPanDelta : {type: "v3", value: new THREE.Vector3()} },
+									vertexShader:   document.getElementById( 'v-gridshader' ).textContent,
+									fragmentShader: document.getElementById( 'f-gridshader' ).textContent,
+									depthTest:      true,
+									depthWrite:     true,
+									transparent:    true,
+									side: 			THREE.DoubleSide,
+									shading:        THREE.FlatShading
+								});
+								return new THREE.Mesh(geometry, shaderMaterial);
+							})(),
+							updatePosition : (function() {
+								var tmp = new THREE.Vector3();
+								var delta = new THREE.Vector3();
+								return function(pos) {
+									// Add the panning delta between this frame and the last, then fade it so it reduces back to 0 eventually
+									tmp.sub(pos);
+									delta.add(tmp);
+									delta.multiplyScalar(0.85);
+									this.geometry.position.copy(pos); // Move center point of grid plane to camera's target point
+									this.geometry.material.uniforms.uPanDelta.value.copy(delta);
+									tmp.copy(pos);
+								}
+							})()
+						};
+
+						window.scene.add(cameraBoundObjects.gridPlane.geometry);
+						cameraBoundObjects.gridPlane.geometry.rotateOnAxis(new THREE.Vector3(1,0,0), Math.PI / 2);
+
+
+						cameraBoundObjects.updateCameraPos = function(pos) {
+							for (var i in this) {
+								this[i].updatePosition && this[i].updatePosition(pos.clone());
+							}
+						}
 					}
 
 					function addControls(){
-						controls = new THREE.TrackballControls( camera, elem[0] );
-						controls.rotateSpeed = 10.0;
+						controls = new THREE.OrbitControls( camera, elem[0].childNodes[0] );
+						controls.rotateSpeed = 0.3;
 						controls.zoomSpeed = 2.2;
 						controls.panSpeed = 2;
 
-						controls.noZoom = false;
-						controls.noPan = true;
-
-						controls.staticMoving = true;
-						controls.dynamicDampingFactor = 0.3;
+						controls.enableDamping = true;
+						controls.dampingFactor = 0.3;
 
 						controls.keys = [ 65, 83, 68 ];
 						controls.minDistance = 5;
-						controls.addEventListener( 'change', render );
 						controls.addEventListener('end', enablePicking);
 					}
 
@@ -228,21 +264,22 @@ angular.module('edGalaxyMap')
 						selectedSystemIcon = new THREE.Sprite( selectedSystemIconMaterial );
 						selectedSystemIcon.name = "selectedSystemIcon";
 						selectedSystemIcon.visible = false;
-						selectedSystemIcon.scale.set(1,1.5,1);
+						selectedSystemIcon.scale.set(0.33,0.66,0.33);
 						window.scene.add( selectedSystemIcon );
 					}
 
 					function init() {
 						camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1, 999000);
-						camera.position.set(0, 0, 50);
+						camera.position.set(0, 50, 50);
 
-						camera.lookAt(-25,0, 0);
+						//camera.lookAt(-25,0, 0);
 
 						window.scene = new THREE.Scene();
 						toggleSceneLoading(true);
 
 						addTargetCircle();
 						addSelectedSystemIcon();
+						addCameraBoundGeometry();
 
 						raycaster = new THREE.Raycaster();
 						raycaster.params.PointCloud.threshold = 0.5;
@@ -288,10 +325,11 @@ angular.module('edGalaxyMap')
 									});
 
 									var loadingPlaneGeometry = new THREE.PlaneGeometry(50,50,50);
-									loadingPlaneGeometry.lookAt( camera.position );
+									//loadingPlaneGeometry.lookAt( camera.position );
 
 									loadingTextMesh = new THREE.Mesh( loadingPlaneGeometry, shaderMaterial );
-									loadingTextMesh.position.set(-25,0, 0)
+									loadingTextMesh.position.set(0,50, 25);
+									loadingTextMesh.lookAt(camera.position);
 									window.scene.add(loadingTextMesh);
 						}
 						else{
@@ -324,14 +362,14 @@ angular.module('edGalaxyMap')
 
 					function flyToSystem(location){
 						disablePicking();
-										selectedSystemIcon.position.set(location);
-										stationsService.findStationsBySystemId(location.systemId);
+						selectedSystemIcon.position.set(location.x, location.y + 0.75, location.z);
+						stationsService.findStationsBySystemId(location.systemId);
                     var whichZ = () => {
                         return camera.position.z > 0 ? 5 : -5;
                     };
                     var tween = new TWEEN.Tween(camera.position).to({
-                        x: location.x + 5,
-                        y: location.y + 5,
+                        x: location.x + 5.5,
+                        y: location.y + 5.5,
                         z: location.z + whichZ()
                     })
 										.easing(TWEEN.Easing.Linear.None)
@@ -362,7 +400,7 @@ angular.module('edGalaxyMap')
 
 					function findIntersect(event) {
 							raycaster.setFromCamera(mouse, camera);
-							var intersects = raycaster.intersectObjects(window.scene.children);
+							var intersects = raycaster.intersectObjects([particleSystem]);
 							if (Array.isArray(intersects) && intersects[0]) {
 									var intersect = intersects[0];
 									if(intersect.object.name === 'selectedSystemIcon'){
@@ -401,11 +439,9 @@ angular.module('edGalaxyMap')
 					function animate(time) {
 						if(!isLoading){
 							controls.update();
-							selectedSystemIcon.position.copy( camera.position );
-							selectedSystemIcon.rotation.copy( camera.rotation );
-							selectedSystemIcon.updateMatrix();
-							selectedSystemIcon.translateZ( - 30 );
-							selectedSystemIcon.translateY( + 0.7 );
+							var distToCamera = selectedSystemIcon.position.distanceTo(camera.position) * 0.1;
+							var scaleFactor = Math.max(Math.min(distToCamera, 10.0), 1.0);
+							selectedSystemIcon.scale.set(0.33 * scaleFactor, 0.66 * scaleFactor, 0.33 * scaleFactor);
 						}
 						requestAnimationFrame(animate);
 						TWEEN.update(time);
@@ -417,9 +453,12 @@ angular.module('edGalaxyMap')
 						var delta = clock.getDelta();
 						if(isLoading){
 							uniforms.time.value += delta * 5;
+						} else {
+							cameraBoundObjects.updateCameraPos(controls.target);
 						}
 						renderer.autoClear = false;
 						renderer.clear();
+
 						// renderer.render(backgroundScene , backgroundCamera )
 						renderer.render(window.scene, camera);
 					}
