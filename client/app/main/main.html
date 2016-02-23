@@ -1,0 +1,171 @@
+<navbar></navbar>
+<system-info></system-info>
+<color-selection></color-selection>
+<ed-system-map></ed-system-map>
+<footer></footer>
+<script type="x-shader/x-vertex" id="vertexshader">
+    attribute vec4 aColorIndex;
+    attribute float aSize;
+
+    uniform float scale;
+    uniform int activeColoring;
+
+    varying float vActiveColorIndex;
+
+    void main() {
+      //TODO: solve this with a preprocessor directive instead and just recompile the shader when activeColoring changes
+      if (activeColoring == 0)
+        vActiveColorIndex = float(aColorIndex[0]);
+      else if (activeColoring == 1)
+        vActiveColorIndex = float(aColorIndex[1]);
+      else if (activeColoring == 2)
+        vActiveColorIndex = float(aColorIndex[2]);
+      else
+        vActiveColorIndex = float(aColorIndex[3]);
+
+      vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+      gl_PointSize = min(aSize * ( scale / length( mvPosition.xyz ) ), 40.0);
+      gl_Position = projectionMatrix * mvPosition;
+    }
+  </script>
+
+  <script type="x-shader/x-fragment" id="fragmentshader">
+    uniform sampler2D texture;
+    uniform sampler2D colorPalette; //width: 16, height: 2
+
+    varying float vActiveColorIndex;
+
+    void main() {
+      gl_FragColor = texture2D( colorPalette, vec2( vActiveColorIndex / 15.95, 0.0 ) );
+      gl_FragColor.a *= texture2D( texture, gl_PointCoord ).a;
+      if (gl_FragColor.a < 0.1) discard;
+    }
+  </script>
+
+  <script type="x-shader/x-vertex" id="v-gridshader">
+    varying vec3 vPosObjSpace;
+    varying vec3 vPosWorldSpace;
+    varying vec3 vCameraWorldPos;
+    varying vec3 vObjWorldCenter;
+
+    void main() {
+      vCameraWorldPos = cameraPosition;
+      vPosObjSpace = position;
+      vPosWorldSpace = (modelMatrix * vec4(position, 1.0)).xyz;
+
+      //Grid plane is assumed to be at 0,0,0 originally, so the translation part of the model matrix is its current center point in world space
+      vObjWorldCenter = vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]);
+
+      vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+      gl_Position = projectionMatrix * mvPosition;
+    }
+  </script>
+
+  <script type="x-shader/x-fragment" id="f-gridshader">
+    #extension GL_OES_standard_derivatives : enable
+
+    varying vec3 vPosObjSpace;
+    varying vec3 vPosWorldSpace;
+    varying vec3 vCameraWorldPos;
+    varying vec3 vObjWorldCenter;
+
+    uniform vec3 uPanDelta;
+
+    void main() {
+      // This is used to scale the grid size as the camera zooms out
+      float cameraDist = max(pow(0.03, distance(vCameraWorldPos, vObjWorldCenter) * 0.005), 0.005);
+
+      // Used to fade the opacity of the grid lines as they get further from the center
+      float invFragDistance = pow(0.4, length(vPosObjSpace) * 0.12 * cameraDist);
+
+      // Generates a grid using screen space derivatives, uPanDelta is added to give the grid some movement when the camera is panned
+      vec2 coord = (vPosObjSpace.xy + uPanDelta.xz) * cameraDist;
+      vec2 grid = abs(fract(coord - 0.5) - 0.5) / fwidth(coord);
+      float line = min(grid.x, grid.y);
+      float a = 1.0 - min(line, 1.0);
+      a *= invFragDistance;
+
+      if (a < 0.01) discard;
+
+      gl_FragColor = vec4(0.4, 0.4, 0.4, a);
+    }
+  </script>
+
+
+
+
+
+
+
+  <script type="x-shader/x-vertex" id="dotVertexShader">
+      /**
+      * Example Vertex Shader
+      * Sets the position of the vertex by setting gl_Position
+      */
+
+      // Set the precision for data types used in this shader
+      precision highp float;
+      precision highp int;
+
+      uniform float time;
+
+      attribute vec2 uv2;
+
+      // Examples of variables passed from vertex to fragment shader
+      varying vec3 vPosition;
+      varying vec3 vNormal;
+      varying vec2 vUv;
+      varying vec2 vUv2;
+
+      void main() {
+
+          // To pass variables to the fragment shader, you assign them here in the
+          // main function. Traditionally you name the varying with vAttributeName
+          vNormal = normal;
+          vUv = uv;
+          vUv2 = uv2;
+          vPosition = position;
+
+          // This sets the position of the vertex in 3d space. The correct math is
+          // provided below to take into account camera and object data.
+          gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+      }
+  </script>
+
+  <script type="x-shader/x-fragment" id="dotFragmentShader">
+      precision highp float;
+
+      #define pi 3.1415926536
+      #define N 12
+
+      varying vec2 vUv;
+      uniform float time;
+      uniform float speed;
+      uniform vec2 uvScale;
+      uniform float brightness;
+      uniform vec3 color;
+      uniform float popSize;
+      uniform float baseSize;
+      uniform float radius;
+
+      void main(void) {
+          vec2 position = ( vUv.xy - 0.5 ) * uvScale;
+          vec2 center = position;
+
+          float c = 0.;
+          float o;
+          for (int i = 0; i < N; i++)  {
+              vec2 xy;
+              o = float(i) / float(N) * 2.0 * pi;
+              xy.x = radius * cos(o);
+              xy.y = radius * sin(o);
+              xy += center;
+              c += brightness * pow(200000.0, (baseSize - length(xy) * 1.9) * (0.99 + popSize * fract(float(-i) / float(N) - time * speed))) / 20000.0;
+          }
+          gl_FragColor = vec4(
+              clamp( c * color, vec3( 0.0 ), vec3( 1.0 ) ),
+              1.0
+          );
+      }
+  </script>
