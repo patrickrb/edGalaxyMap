@@ -1,6 +1,8 @@
 <navbar></navbar>
-<system-info></system-info>
-<color-selection></color-selection>
+<system-info  class="slideOutLeft" ng-hide="systemInfoHidden"></system-info>
+<show-system-info class="slideOutLeft" ng-hide="!systemInfoHidden"></show-system-info>
+<color-selection class="slideOutRight" ng-hide="colorSelectionHidden"></color-selection>
+<show-color-selection class="slideOutRight" ng-hide="!colorSelectionHidden"></show-color-selection>
 <ed-system-map></ed-system-map>
 <footer></footer>
 <script type="x-shader/x-vertex" id="vertexshader">
