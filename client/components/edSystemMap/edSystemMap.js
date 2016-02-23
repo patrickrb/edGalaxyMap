@@ -363,7 +363,7 @@ angular.module('edGalaxyMap')
 					function flyToSystem(location){
 						disablePicking();
 						selectedSystemIcon.position.set(location.x, location.y + 0.75, location.z);
-						stationsService.findStationsBySystemId(location.systemId);
+						stationsService.findStationsBySystemId(location.id);
                     var whichZ = () => {
                         return camera.position.z > 0 ? 5 : -5;
                     };
