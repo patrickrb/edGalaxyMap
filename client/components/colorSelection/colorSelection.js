@@ -13,6 +13,11 @@ angular.module('edGalaxyMap')
 				$scope.activeColors = colorService.getActiveColors();
 			});
 
+
+		 $scope.hideColorSelection = function(){
+			 	$rootScope.colorSelectionHidden = true;
+		 }
+
 			$scope.updateColorFlags = function(index) {
 				colorService.setColorActive(index, $scope.activeColors[index]);
 				$rootScope.$broadcast("systemColoring:updateActives");
