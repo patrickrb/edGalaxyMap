@@ -23,11 +23,10 @@ module.exports = function(config) {
       'client/bower_components/angular-resource/angular-resource.js',
       'client/bower_components/angular-cookies/angular-cookies.js',
       'client/bower_components/angular-sanitize/angular-sanitize.js',
-      'client/bower_components/lodash/dist/lodash.compat.js',
+      'client/bower_components/lodash/lodash.js',
       'client/bower_components/angular-socket-io/socket.js',
       'client/bower_components/angular-ui-router/release/angular-ui-router.js',
       'client/bower_components/angular-validation-match/dist/angular-validation-match.min.js',
-      'client/bower_components/three.js/build/three.js',
       'client/bower_components/angular-scenario/angular-scenario.js',
       'client/bower_components/angular-route/angular-route.js',
       'client/bower_components/angular-animate/angular-animate.js',
@@ -38,20 +37,19 @@ module.exports = function(config) {
       'client/bower_components/bootstrap/dist/js/bootstrap.js',
       'client/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       'client/bower_components/angular-gravatar/build/angular-gravatar.js',
+      'client/bower_components/three.js/build/three.js',
       'client/bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'node_modules/socket.io-client/socket.io.js',
+      'client/components/oath-buttons/oath-buttons.html',
       'client/app/app.js',
       'client/app/**/*.js',
       'client/components/**/*.js',
-      'client/app/**/*.jade',
-      'client/components/**/*.jade',
       'client/app/**/*.html',
       'client/components/**/*.html'
     ],
 
     preprocessors: {
-      '**/*.jade': 'ng-jade2js',
       '**/*.html': 'html2js',
       'client/{app,components}/**/*.js': 'babel'
     },
@@ -60,11 +58,7 @@ module.exports = function(config) {
       stripPrefix: 'client/'
     },
 
-    ngJade2JsPreprocessor: {
-      stripPrefix: 'client/'
-    },
 
-    
     babelPreprocessor: {
       options: {
         sourceMap: 'inline'
@@ -76,7 +70,7 @@ module.exports = function(config) {
         return file.originalPath;
       }
     },
-    
+
 
     // list of files / patterns to exclude
     exclude: [],
