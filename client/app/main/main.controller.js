@@ -16,27 +16,6 @@ function MainController($scope, $rootScope, $http, socket) {
    }, function(newVal, oldVal) {
       $scope.colorSelectionHidden = $rootScope.colorSelectionHidden;
    });
-
-  $http.get('/api/things').then(function(response) {
-    self.awesomeThings = response.data;
-    socket.syncUpdates('thing', self.awesomeThings);
-  });
-
-  this.addThing = function() {
-    if (self.newThing === '') {
-      return;
-    }
-    $http.post('/api/things', { name: self.newThing });
-    self.newThing = '';
-  };
-
-  this.deleteThing = function(thing) {
-    $http.delete('/api/things/' + thing._id);
-  };
-
-  $scope.$on('$destroy', function() {
-    socket.unsyncUpdates('thing');
-  });
 }
 
 angular.module('edGalaxyMap')

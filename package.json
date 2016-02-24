@@ -92,6 +92,7 @@
     "karma-spec-reporter": "~0.0.20",
     "mocha": "^2.2.5",
     "open": "~0.0.4",
+    "phantomjs-prebuilt": "^2.1.4",
     "proxyquire": "^1.0.1",
     "requirejs": "~2.1.11",
     "sinon-chai": "^2.8.0",
