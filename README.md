@@ -1,5 +1,6 @@
 [![Join the chat at https://gitter.im/patrickrb/edGalaxyMap](https://badges.gitter.im/patrickrb/edGalaxyMap.svg)](https://gitter.im/patrickrb/edGalaxyMap?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Dependency Status](https://gemnasium.com/patrickrb/edGalaxyMap.svg)](https://gemnasium.com/patrickrb/edGalaxyMap)
+[ ![Codeship Status for patrickrb/edGalaxyMap](https://codeship.com/projects/8f486ba0-bd50-0133-2548-2a1d867cc1c8/status?branch=develop)](https://codeship.com/projects/136539)
 # Elite Dangerous Galaxy Map
 ##Preview: [http://elitedangerousuniverse.com][3]
 Built with [Angular][1] and [Three.js][2]
