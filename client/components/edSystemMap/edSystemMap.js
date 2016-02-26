@@ -1,5 +1,5 @@
 angular.module('edGalaxyMap')
-	.directive('edSystemMap',function ($q, systemsService, $rootScope, stationsService, colorService) {
+	.directive('edSystemMap',function ($q, systemsService, $rootScope, stationsService, colorService, labelService) {
 			return {
 				restrict: 'E',
 				link: function (scope, elem, attr) {
@@ -289,6 +289,7 @@ angular.module('edGalaxyMap')
 
 						elem[0].appendChild(renderer.domElement);
 
+
 						// Events
 						window.addEventListener('resize', onWindowResize, false);
 						elem[0].addEventListener('mousemove', onMouseMove, false);
@@ -364,17 +365,15 @@ angular.module('edGalaxyMap')
 						disablePicking();
 						selectedSystemIcon.position.set(location.x, location.y + 0.75, location.z);
 						stationsService.findStationsBySystemId(location.id);
-                    var whichZ = () => {
-                        return camera.position.z > 0 ? 5 : -5;
-                    };
                     var tween = new TWEEN.Tween(camera.position).to({
-                        x: location.x + 5.5,
-                        y: location.y + 5.5,
-                        z: location.z + whichZ()
+                        x: location.x,
+                        y: location.y,
+                        z: location.z + 5
                     })
 										.easing(TWEEN.Easing.Linear.None)
 										.onComplete(function(){
 												selectedSystemIcon.visible = true;
+												labelService.addLabel(location, scene, camera);
 												enablePicking();
 										})
 										.start();
@@ -415,25 +414,12 @@ angular.module('edGalaxyMap')
 										var location = systemsService.systems[intersect.index];
 										if (!colorService.isSystemActive(location))
 											return false;
-										addLabel(event, location.name);
 										setTargetPosition(location);
 										return intersect;
 									}
 							} else {
 									return false;
 							}
-					}
-
-					function addLabel(event, name){
-              return $q(function (resolve, reject) {
-                  label.css({
-                      top: (event.offsetY - 1) - 30,
-                      left: (event.offsetX + 1) - 40,
-                      visibility: 'visible',
-                      display: 'block'
-                  });
-                  return resolve(label.html(name));
-              }.bind(this));
 					}
 
 					function animate(time) {
@@ -448,10 +434,10 @@ angular.module('edGalaxyMap')
 						render();
 					}
 
-					//
 					function render() {
 						var delta = clock.getDelta();
 						if(isLoading){
+							//animate loading texture while systems load
 							uniforms.time.value += delta * 5;
 						} else {
 							cameraBoundObjects.updateCameraPos(controls.target);
