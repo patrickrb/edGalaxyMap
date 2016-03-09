@@ -5,9 +5,7 @@ angular.module('edGalaxyMap')
         return {
             restrict: 'E',
             templateUrl: 'components/navbar/navbar.html',
-            link: function($scope, elem, attr) {
-                console.log('loaded navbar');
-
+            link: function($scope) {
                 $scope.isCollapsed = true;
                 $scope.isLoggedIn = Auth.isLoggedIn;
                 $scope.isAdmin = Auth.isAdmin;

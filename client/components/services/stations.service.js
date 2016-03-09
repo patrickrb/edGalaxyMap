@@ -5,10 +5,8 @@ angular.module('edGalaxyMap')
     class StationsService {
             constructor() {
                 this.stations = [];
-                this.selectedStation;
+                this.selectedStation = {};
                 this.loading = false;
-                // this.loading = false;
-                // this.errors = false;
             }
 
             findStationsBySystemId(systemId) {
@@ -20,7 +18,7 @@ angular.module('edGalaxyMap')
                         .then(function(stationsData){
                             //assign the response to the service
                             this.stations = stationsData;
-                            this.selectedStation = stationsData[0]
+                            this.selectedStation = stationsData[0];
                             //done loading
                             this.loading = false;
                             this.errors = false;
@@ -42,7 +40,7 @@ angular.module('edGalaxyMap')
                         .then(function(stationsData){
                             //assign the response to the service
                             this.stations = stationsData;
-                            this.selectedStation = stationsData[0]
+                            this.selectedStation = stationsData[0];
                             //done loading
                             this.loading = false;
                             this.errors = false;
@@ -56,5 +54,5 @@ angular.module('edGalaxyMap')
                 }.bind(this));
             }
         }
-        return new StationsService;
+        return new StationsService();
   });
