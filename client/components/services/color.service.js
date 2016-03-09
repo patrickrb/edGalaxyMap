@@ -38,13 +38,11 @@ angular.module('edGalaxyMap')
             }
 
             getActiveColors() {
-                console.log('active colors: ', this.activeColors);
                 return this.activeColors;
             }
 
             isSystemActive(system) {
                 var key = this.activeColorType;
-                console.log('key: ', key);
                 if (key === 'economy') { key = 'primaryEconomy'; }
                 var value = system[key] || 'None';
                 return this.activeColors[this.getColorNames().indexOf(value)];
@@ -52,7 +50,6 @@ angular.module('edGalaxyMap')
 
             getColorPaletteImage() {
                 var activeNames = this.getColorNames();
-                console.log('colors: ', activeNames);
                 this.paletteContext.clearRect(0, 0, 16, 2);
                 for (var i = 0; i < this.activeColors.length; i++) {
                     if (activeNames[i] === 'UNUSED') {
