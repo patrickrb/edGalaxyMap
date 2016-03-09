@@ -17,6 +17,8 @@ angular.module('edGalaxyMap')
                 this.paletteCanvas.width = 16;
                 this.paletteCanvas.height = 2;
                 this.paletteContext = this.paletteCanvas.getContext('2d');
+                this.uniforms = {
+                };
             }
 
             setColoringType(colorType) {
