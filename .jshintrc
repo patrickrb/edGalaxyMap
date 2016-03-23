@@ -1,0 +1,5 @@
+"globals": {
+    "THREE": false,
+    "three": false,
+    "TWEEN": false
+}

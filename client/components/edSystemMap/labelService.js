@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('edGalaxyMap')
-  .service('labelService', function ($q) {
+  .service('labelService', function () {
     class LabelService {
             constructor() {
                 LabelService.currentLabel = null;
             }
 
-            addLabel(location, scene, camera) {
+            addLabel(location, scene) {
               scene.remove(LabelService.currentLabel);
               var loader = new THREE.FontLoader();
               loader.load( 'assets/fonts/helvetiker_bold.typeface.js', function ( font ) {
@@ -30,5 +30,5 @@ angular.module('edGalaxyMap')
                 });
             }
         }
-        return new LabelService;
+        return new LabelService();
   });

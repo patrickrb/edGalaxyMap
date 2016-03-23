@@ -1,15 +1,15 @@
+'use strict';
+
 angular.module('edGalaxyMap')
-	.directive('edSystemMap',function ($q, systemsService, $rootScope, stationsService, colorService, labelService) {
+	.directive('edSystemMap',function ($q, systemsService, $rootScope, stationsService, colorService, labelService, loadingAnimationService) {
 			return {
 				restrict: 'E',
-				link: function (scope, elem, attr) {
+				link: function (scope, elem) {
 					var camera;
 					var controls;
 					var cameraBoundObjects = {};
 					var uniforms;
 					var renderer;
-					var loadingTextMesh;
-					var isLoading = true;
 					var clock = new THREE.Clock();
 					var particleSystem;
 					var raycaster;
@@ -20,11 +20,11 @@ angular.module('edGalaxyMap')
 					var targetCircleGeo = new THREE.CircleGeometry(50, 64);
 					var BASE_POINT_SIZE = 100;
 					var POP_SIZE_THRESHOLD = 1000000000; //population > than this will start scaling point size up
-					var c_pickingEnabled = true;
-					var c_mouseDownPos = new THREE.Vector2();
+					var pickingEnabled = true;
+					var mouseDownPos = new THREE.Vector2();
 					var targetLineMaterial = new THREE.LineBasicMaterial({color: '0xffffff'});
 					var colorPaletteTexture;
-					var label = $("#pointer");
+					var label = $('#pointer');
 
 					//load galaxy data
 					systemsService.init();
@@ -39,9 +39,9 @@ angular.module('edGalaxyMap')
 				});
 
 				scope.$on('systemColoring:update', function(event, newColorKey) {
-					var colorIndex = colorService.map_colorTypes.indexOf(newColorKey);
+					var colorIndex = colorService.mapColorTypes.indexOf(newColorKey);
 					if (colorIndex < 0) {
-						console.error("Unknown system coloring type: "+newColorKey);
+						console.error('Unknown system coloring type: '+newColorKey);
 						colorIndex = 0;
 					}
 					uniforms.activeColoring.value = colorIndex;
@@ -62,7 +62,7 @@ angular.module('edGalaxyMap')
 					//wait for systems data to load, then draw systems and animate
 					scope.$watch(function() {
 			        return systemsService.systems.length;
-			    }, function(newVal, oldVal) {
+			    }, function() {
 							if(systemsService.systems.length >= 1){
 								loadSystems();
 								// document.getElementById("searchSystemsInput").focus();
@@ -72,25 +72,25 @@ angular.module('edGalaxyMap')
 					//wait for systems data to load, then draw systems and animate
 					scope.$watch(function() {
 							return stationsService.stations.length;
-					}, function(newVal, oldVal) {
+					}, function() {
 							if(stationsService.stations.length >= 1){
 								scope.stations = stationsService.stations;
 							}
 							else{
-								scope.stations = []
+								scope.stations = [];
 							}
 					});
 
 					function loadSystems() {
-						toggleSceneLoading(false);
+						loadingAnimationService.toggleLoadingAnimation(false, scene, camera);
 						var texture = THREE.ImageUtils.loadTexture('assets/textures/circle.png');
 						texture.minFilter = THREE.LinearFilter;
 						uniforms = {
 
-							activeColoring: { type: "i", value: 0 },
-							colorPalette: { type: "t", value: null },
-							texture: { type: "t", value: texture },
-							scale: {type: "f", value: 1.0}
+							activeColoring: { type: 'i', value: 0 },
+							colorPalette: { type: 't', value: null },
+							texture: { type: 't', value: texture },
+							scale: {type: 'f', value: 1.0}
 
 						};
 						updateColorPaletteTexture();
@@ -110,9 +110,9 @@ angular.module('edGalaxyMap')
 						/*
 						* This maps the property to a color index that will be used in the shader to read the right color from a texture palette
 						* colorIndex (vec4)
-						*   [0] = map_economy
-						*   [1] = map_allegiance
-						*   [2] = map_government
+						*   [0] = mapEconomy
+						*   [1] = mapAllegiance
+						*   [2] = mapGovernment
 						*   [3] = unused (star type?)
 						*/
 						var colorIndex = new Float32Array( systemsService.systems.length * 4 );
@@ -126,9 +126,9 @@ angular.module('edGalaxyMap')
 							positions[ i3 + 1 ] = system.y;
 							positions[ i3 + 2 ] = system.z;
 
-							colorIndex[ i*4 + 0 ] = colorService.map_economy.indexOf(systemsService.systems[i].primary_economy);
-							colorIndex[ i*4 + 1 ] = colorService.map_allegiance.indexOf(systemsService.systems[i].allegiance);
-							colorIndex[ i*4 + 2 ] = colorService.map_government.indexOf(systemsService.systems[i].government);
+							colorIndex[ i*4 + 0 ] = colorService.mapEconomy.indexOf(systemsService.systems[i].primary_economy);
+							colorIndex[ i*4 + 1 ] = colorService.mapAllegiance.indexOf(systemsService.systems[i].allegiance);
+							colorIndex[ i*4 + 2 ] = colorService.mapGovernment.indexOf(systemsService.systems[i].government);
 							colorIndex[ i*4 + 3 ] = 0;
 
 							sizes[ i ] = getPopulationScaleForSystem(system);
@@ -147,7 +147,7 @@ angular.module('edGalaxyMap')
 						particleSystem.sortParticles = true;
 						particleSystem.dynamic = true;
 						window.scene.add(particleSystem);
-						isLoading = false;
+						loadingAnimationService.isLoading = false;
 						addControls();
 					}
 
@@ -162,7 +162,7 @@ angular.module('edGalaxyMap')
             var $target = $(event.target);
 						mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 						mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-						if(!isLoading && c_pickingEnabled){
+						if(!loadingAnimationService.isLoading && pickingEnabled){
 							var intersect = findIntersect(event);
 							if (!intersect) {
 										label.css({
@@ -186,7 +186,7 @@ angular.module('edGalaxyMap')
 							geometry : (function() {
 								var geometry = new THREE.PlaneGeometry(10000,10000);
 								var shaderMaterial = new THREE.ShaderMaterial( {
-									uniforms:		{ uPanDelta : {type: "v3", value: new THREE.Vector3()} },
+									uniforms:		{ uPanDelta : {type: 'v3', value: new THREE.Vector3()} },
 									vertexShader:   document.getElementById( 'v-gridshader' ).textContent,
 									fragmentShader: document.getElementById( 'f-gridshader' ).textContent,
 									depthTest:      true,
@@ -208,7 +208,7 @@ angular.module('edGalaxyMap')
 									this.geometry.position.copy(pos); // Move center point of grid plane to camera's target point
 									this.geometry.material.uniforms.uPanDelta.value.copy(delta);
 									tmp.copy(pos);
-								}
+								};
 							})()
 						};
 
@@ -220,7 +220,7 @@ angular.module('edGalaxyMap')
 							for (var i in this) {
 								this[i].updatePosition && this[i].updatePosition(pos.clone());
 							}
-						}
+						};
 					}
 
 					function addControls(){
@@ -238,11 +238,11 @@ angular.module('edGalaxyMap')
 					}
 
 					function disablePicking() {
-						c_pickingEnabled = false;
+						pickingEnabled = false;
 					}
 
 					function enablePicking() {
-						c_pickingEnabled = true;
+						pickingEnabled = true;
 					}
 
 					function addTargetCircle(){
@@ -262,7 +262,7 @@ angular.module('edGalaxyMap')
 							transparent: true
 						});
 						selectedSystemIcon = new THREE.Sprite( selectedSystemIconMaterial );
-						selectedSystemIcon.name = "selectedSystemIcon";
+						selectedSystemIcon.name = 'selectedSystemIcon';
 						selectedSystemIcon.visible = false;
 						selectedSystemIcon.scale.set(0.33,0.66,0.33);
 						window.scene.add( selectedSystemIcon );
@@ -275,7 +275,7 @@ angular.module('edGalaxyMap')
 						//camera.lookAt(-25,0, 0);
 
 						window.scene = new THREE.Scene();
-						toggleSceneLoading(true);
+						loadingAnimationService.toggleLoadingAnimation(true, scene, camera);
 
 						addTargetCircle();
 						addSelectedSystemIcon();
@@ -294,55 +294,15 @@ angular.module('edGalaxyMap')
 						window.addEventListener('resize', onWindowResize, false);
 						elem[0].addEventListener('mousemove', onMouseMove, false);
 						elem[0].addEventListener('mousedown', function(event) {
-							c_mouseDownPos = new THREE.Vector2(event.pageX, event.pageY);
+							mouseDownPos = new THREE.Vector2(event.pageX, event.pageY);
 							disablePicking();
 						});
 						elem[0].addEventListener('mouseup', function (event) {
-							if (new THREE.Vector2(event.pageX, event.pageY).distanceToSquared(c_mouseDownPos) < 1) {
+							if (new THREE.Vector2(event.pageX, event.pageY).distanceToSquared(mouseDownPos) < 1) {
 								checkClickForIntersect(event);
 							}
 							enablePicking();
 						});
-					}
-
-					function toggleSceneLoading(isLoading){
-						if(isLoading){
-
-							uniforms = {
-										speed: {type: "f", value: 0.2},
-										color: { type: "v3", value: new THREE.Vector3( 0.2784313725490196, 0.34509803921568627, 0.8196078431372549 ) },
-										brightness: {type: "f", value: 0.4},
-										radius: {type: "f", value: 0.3},
-										popSize: {type: "f", value: 0.05 },
-										baseSize: {type: "f", value: 0.9 },
-										uvScale:{ type: "v2", value: new THREE.Vector2(1,1)},
-										time: {type: "f", value: 1.0}
-									};
-
-									var shaderMaterial = new THREE.ShaderMaterial( {
-										uniforms:       uniforms,
-										vertexShader:   document.getElementById( 'dotVertexShader' ).textContent,
-										fragmentShader: document.getElementById( 'dotFragmentShader' ).textContent
-									});
-
-									var loadingPlaneGeometry = new THREE.PlaneGeometry(50,50,50);
-									//loadingPlaneGeometry.lookAt( camera.position );
-
-									loadingTextMesh = new THREE.Mesh( loadingPlaneGeometry, shaderMaterial );
-									loadingTextMesh.position.set(0,50, 25);
-									loadingTextMesh.lookAt(camera.position);
-									window.scene.add(loadingTextMesh);
-						}
-						else{
-							window.scene.remove(loadingTextMesh);
-						}
-					}
-
-					function getLightYears(sourceVector, targetVector){
-							var sourceVector = new THREE.Vector3(0,0,0);
-							var targetVector = new THREE.Vector3(3.03125, -0.09375, 3.15625);
-
-							return sourceVector.distanceTo(targetVector);
 					}
 
 					//
@@ -353,9 +313,9 @@ angular.module('edGalaxyMap')
 					}
 
 					function checkClickForIntersect(event){
-								if(!isLoading){
+								if(!loadingAnimationService.isLoading){
 									var intersect = findIntersect(event);
-	                if (!intersect) return;
+	                if (!intersect) { return; }
 	                var location = systemsService.systems[intersect.index];
 									$rootScope.$broadcast('selectedSystem:update', location);
 								}
@@ -377,7 +337,7 @@ angular.module('edGalaxyMap')
 												enablePicking();
 										})
 										.start();
-                    var tween = new TWEEN.Tween(controls.target).to({
+                    tween = new TWEEN.Tween(controls.target).to({
                         x: location.x,
                         y: location.y,
                         z: location.z
@@ -387,17 +347,17 @@ angular.module('edGalaxyMap')
 					}
 
 					function setTargetPosition(location) {
-              return $q(function (resolve, reject) {
+              return $q(function (resolve) {
                   targetCircle.visible = true;
 									targetCircle.lookAt( camera.position );
 									var popScale = getPopulationScaleForSystem( location );
 									targetCircle.scale.set( popScale, popScale, popScale );
-                  return resolve(targetCircle.position.set(location.x, location.y, location.z))
+                  return resolve(targetCircle.position.set(location.x, location.y, location.z));
               }.bind(this));
           }
 
 
-					function findIntersect(event) {
+					function findIntersect() {
 							raycaster.setFromCamera(mouse, camera);
 							var intersects = raycaster.intersectObjects([particleSystem]);
 							if (Array.isArray(intersects) && intersects[0]) {
@@ -412,8 +372,9 @@ angular.module('edGalaxyMap')
 									}
 									else{
 										var location = systemsService.systems[intersect.index];
-										if (!colorService.isSystemActive(location))
+										if (!colorService.isSystemActive(location)) {
 											return false;
+										}
 										setTargetPosition(location);
 										return intersect;
 									}
@@ -423,7 +384,7 @@ angular.module('edGalaxyMap')
 					}
 
 					function animate(time) {
-						if(!isLoading){
+						if(!loadingAnimationService.isLoading){
 							controls.update();
 							var distToCamera = selectedSystemIcon.position.distanceTo(camera.position) * 0.1;
 							var scaleFactor = Math.max(Math.min(distToCamera, 10.0), 1.0);
@@ -436,9 +397,9 @@ angular.module('edGalaxyMap')
 
 					function render() {
 						var delta = clock.getDelta();
-						if(isLoading){
+						if(loadingAnimationService.isLoading){
 							//animate loading texture while systems load
-							uniforms.time.value += delta * 5;
+							loadingAnimationService.uniforms.time.value += delta * 5;
 						} else {
 							cameraBoundObjects.updateCameraPos(controls.target);
 						}
@@ -449,6 +410,6 @@ angular.module('edGalaxyMap')
 						renderer.render(window.scene, camera);
 					}
 				}
-			}
+			};
 		}
 	);

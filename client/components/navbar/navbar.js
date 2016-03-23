@@ -1,76 +1,48 @@
+'use strict';
+
 angular.module('edGalaxyMap')
-	.directive('navbar',function ($rootScope, $q, $uibModal, systemsService, userService, colorService, $cookieStore, Auth) {
-			return {
-				restrict: 'E',
-				templateUrl: 'components/navbar/navbar.html',
-				link: function ($scope, elem, attr) {
-					console.log('loaded navbar');
+    .directive('navbar', function($rootScope, systemsService, userService, colorService, $cookieStore, Auth) {
+        return {
+            restrict: 'E',
+            templateUrl: 'components/navbar/navbar.html',
+            link: function($scope) {
+                $scope.isCollapsed = true;
+                $scope.isLoggedIn = Auth.isLoggedIn;
+                $scope.isAdmin = Auth.isAdmin;
+                $scope.getCurrentUser = Auth.getCurrentUser;
 
-				    $scope.isCollapsed = true;
-				    $scope.isLoggedIn = Auth.isLoggedIn;
-				    $scope.isAdmin = Auth.isAdmin;
-				    $scope.getCurrentUser = Auth.getCurrentUser;
+                $scope.changeSystem = function($item) {
+                    $rootScope.$broadcast('selectedSystem:update', $item);
+                };
 
-						$scope.changeSystem = function($item, $model, $label, $event){
-							$rootScope.$broadcast('selectedSystem:update', $item);
-						}
+                $scope.changeColoring = function(name) {
+                    colorService.setColoringType(name);
+                    $rootScope.$broadcast('systemColoring:update', name);
+                };
 
-						$scope.changeColoring = function(name) {
-							colorService.setColoringType(name);
-							$rootScope.$broadcast('systemColoring:update', name);
-						}
+                //wait for systems data to load, then draw systems and animate
+                $scope.$watch(function() {
+                    return systemsService.systems.length;
+                }, function() {
+                    if (systemsService.systems.length >= 1) {
+                        $scope.systems = systemsService.systems;
+                    }
+                });
 
-						//wait for systems data to load, then draw systems and animate
-						$scope.$watch(function() {
-				        return systemsService.systems.length;
-				    }, function(newVal, oldVal) {
-								if(systemsService.systems.length >= 1){
-									$scope.systems = systemsService.systems;
-								}
-				    });
+                $scope.$watch(function() {
+                    return userService.isLoggedIn;
+                }, function() {
+                    if (userService.isLoggedIn) {
+                        $scope.user = $cookieStore.get('user');
+                        $scope.isLoggedIn = true;
+                    } else {
+                        $scope.isLoggedIn = false;
+                    }
+                });
 
-						$scope.$watch(function() {
-								return userService.isLoggedIn;
-						}, function(newVal, oldVal) {
-							if(userService.isLoggedIn){
-								$scope.user = $cookieStore.get('user');
-								$scope.isLoggedIn = true
-							}
-							else{
-								$scope.isLoggedIn = false;
-							}
-						});
-
-						$scope.logout = function(){
-							userService.logout();
-						}
-
-						$scope.openLoginModal = function () {
-						 var modalInstance = $uibModal.open({
-							 animation: $scope.animationsEnabled,
-							 templateUrl: '/scripts/directives/loginModal/loginModal.html',
-							 controller: 'LoginModalCtrl',
-							 size: 'md'
-						 });
-
-						 modalInstance.result.then(function () {
-						 }, function () {
-						 });
-					 };
-
-
-						$scope.openRegisterModal = function () {
-						 var modalInstance = $uibModal.open({
-							 animation: $scope.animationsEnabled,
-							 templateUrl: '/scripts/directives/registerModal/registerModal.html',
-							 controller: 'RegisterModalCtrl',
-							 size: 'md'
-						 });
-
-						 modalInstance.result.then(function () {
-						 }, function () {
-						 });
-					 };
-        }
-      }
+                $scope.logout = function() {
+                    userService.logout();
+                };
+            }
+        };
     });
