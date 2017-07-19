@@ -4,7 +4,7 @@
 [![Stories in Ready](https://badge.waffle.io/patrickrb/edGalaxyMap.png?label=ready&title=Ready)](http://waffle.io/patrickrb/edGalaxyMap)
 [![Code Climate](https://codeclimate.com/github/patrickrb/edGalaxyMap/badges/gpa.svg)](https://codeclimate.com/github/patrickrb/edGalaxyMap)
 # Elite Dangerous Galaxy Map
-##Preview: [http://elitedangerousuniverse.com][3]
+##Preview: [http://http://192.237.183.26:3000/][3]
 Built with [Angular][1] and [Three.js][2]
 
 ## Getting Started
