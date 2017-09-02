@@ -35,21 +35,10 @@ module.exports = {
   gruntfile: {
     files: ['Gruntfile.js']
   },
-  livereload: {
-    files: [
-      '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.{css,html}',
-      '{.tmp,<%= yeoman.client %>}/{app,components}/**/!(*.spec|*.mock).js',
-      '<%= yeoman.client %>/assets/images/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}'
-    ],
-    options: {
-      livereload: true
-    }
-  },
   express: {
     files: ['<%= yeoman.server %>/**/*.{js,json}'],
-    tasks: ['express:dev', 'wait'],
+    tasks: ['express:dev'],
     options: {
-      livereload: true,
       spawn: false //Without this option specified express won't be reloaded
     }
   },

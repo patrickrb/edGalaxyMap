@@ -1,0 +1,25 @@
+version: '3'
+services:
+  edgalaxymap:
+    build: .
+    image: registry.gitlab.com/patrickrb/edgalaxymap
+    volumes:
+        - '.:/usr/local/src/edgalaxymap/'
+    environment:
+      MONGO_URL: "mongodb://mongodb/edgalaxmap"
+    links:
+      - mongodb
+    ports:
+      - "9000:9000"
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    command: mongod --smallfiles
+
+  mongodb-data:
+    image: mongo:latest
+    volumes:
+      - ./data/db:/data/db
+    command: "true"

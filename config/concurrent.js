@@ -10,15 +10,6 @@ module.exports = {
     'newer:babel:client',
     'sass',
   ],
-  debug: {
-    tasks: [
-      'nodemon',
-      'node-inspector'
-    ],
-    options: {
-      logConcurrentOutput: true
-    }
-  },
   dist: [
     'newer:babel:client',
     'sass',
