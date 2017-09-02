@@ -3,8 +3,6 @@ services:
   edgalaxymap:
     build: .
     image: registry.gitlab.com/patrickrb/edgalaxymap
-    volumes:
-        - '.:/usr/local/src/edgalaxymap/'
     environment:
       MONGO_URL: "mongodb://mongodb/edgalaxmap"
     links:
