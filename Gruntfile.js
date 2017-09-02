@@ -24,25 +24,12 @@ module.exports = function (grunt) {
         dist: 'dist'
       }
     };
-    
+
     // Load grunt configurations automatically
     var configs = require('load-grunt-configs')(grunt, options);
 
     // Define the configuration for all the tasks
     grunt.initConfig(configs);
-
-
-  // Used for delaying livereload until after server has restarted
-  grunt.registerTask('wait', function () {
-    grunt.log.ok('Waiting for server reload...');
-
-    var done = this.async();
-
-    setTimeout(function () {
-      grunt.log.writeln('Done waiting!');
-      done();
-    }, 1500);
-  });
 
   grunt.registerTask('express-keepalive', 'Keep grunt running', function() {
     this.async();
@@ -50,7 +37,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('serve', function (target) {
     if (target === 'dist') {
-      return grunt.task.run(['build', 'env:all', 'env:prod', 'express:prod', 'wait', 'open', 'express-keepalive']);
+      return grunt.task.run(['build', 'env:all', 'env:prod', 'express:prod', 'express-keepalive']);
     }
 
     if (target === 'debug') {
@@ -75,8 +62,6 @@ module.exports = function (grunt) {
       'wiredep:client',
       'postcss',
       'express:dev',
-      'wait',
-      'open',
       'watch'
     ]);
   });
