@@ -46,6 +46,6 @@ Running `npm test` will run the unit tests with karma.
 
 [1]: https://angularjs.org/
 [2]: http://threejs.org/
-[3]: http://192.237.183.26:3000/
+[3]: http://galaxy.burnsforce.com/
 [4]: https://github.com/patrickrb
 [5]: https://github.com/csvurt
